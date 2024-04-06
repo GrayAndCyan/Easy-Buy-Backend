@@ -1,0 +1,17 @@
+<!--
+    plugins在配置文件中的位置必须符合要求，否则会报错，顺序如下:
+    properties?, settings?,
+    typeAliases?, typeHandlers?,
+    objectFactory?,objectWrapperFactory?,
+    plugins?,
+    environments?, databaseIdProvider?, mappers?
+-->
+<plugins>
+    <!-- com.github.pagehelper为PageHelper类所在包名 -->
+    <plugin interceptor="com.github.pagehelper.PageInterceptor">
+<!--   https://pagehelper.github.io/docs/howtouse/#2-%E9%85%8D%E7%BD%AE%E6%8B%A6%E6%88%AA%E5%99%A8%E6%8F%92%E4%BB%B6 -->
+        <property name="helperDialect" value="mysql"/>
+        <property name="rowBoundsWithCount" value="true"/>
+        <property name="offsetAsPageNum" value="true"/>
+    </plugin>
+</plugins>
