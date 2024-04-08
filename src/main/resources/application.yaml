@@ -9,3 +9,8 @@ spring:
 
   jackson:
     default-property-inclusion: non_null # JSON处理时忽略非空字段
+
+jwt:
+  secret-key-str: huHAQ21P5fsGgpnHKipREwz4zgwUxJ8bGl+gmW4mbl4=
+  # token 有效期 单位：天
+  ttl: 99

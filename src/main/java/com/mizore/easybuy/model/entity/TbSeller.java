@@ -2,6 +2,7 @@ package com.mizore.easybuy.model.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -43,6 +44,7 @@ public class TbSeller implements Serializable {
     /**
      * 软删标识，0：未删除，1：已删除
      */
+    @TableLogic
     private Byte deleted;
 
     /**
