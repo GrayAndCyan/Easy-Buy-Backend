@@ -35,7 +35,7 @@ public class TbOrder implements Serializable {
     /**
      * 状态
      */
-    private Byte status;
+    private Integer status;
 
     /**
      * 地址id
@@ -79,11 +79,11 @@ public class TbOrder implements Serializable {
         this.userId = userId;
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

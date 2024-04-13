@@ -14,7 +14,7 @@ public enum OrderStatusEnum {
 
     CANCELLED(600, "已取消");
 
-    private int code;
+    private Integer code;
 
     private String desc;
 
@@ -23,7 +23,7 @@ public enum OrderStatusEnum {
         this.desc = desc;
     }
 
-    public int getCode() {
+    public Integer getCode() {
         return code;
     }
 
