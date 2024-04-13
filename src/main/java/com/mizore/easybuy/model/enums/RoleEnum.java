@@ -8,7 +8,7 @@ public enum RoleEnum {
 
     ADMIN(3, "管理员");
 
-    private int code;
+    private Integer code;
 
     private String desc;
 
@@ -17,7 +17,7 @@ public enum RoleEnum {
         this.desc = desc;
     }
 
-    public int getCode() {
+    public Integer getCode() {
         return code;
     }
 

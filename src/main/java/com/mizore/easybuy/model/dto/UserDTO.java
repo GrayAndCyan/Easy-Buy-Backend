@@ -12,5 +12,5 @@ public class UserDTO {
 
     private String username;
 
-    private byte role;
+    private int role;
 }
