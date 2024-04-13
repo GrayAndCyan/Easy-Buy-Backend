@@ -39,7 +39,7 @@ public class TbUser implements Serializable {
     /**
      * 角色
      */
-    private Byte role;
+    private Integer role;
 
     /**
      * 软删标识，0：未删除，1：已删除
@@ -81,11 +81,11 @@ public class TbUser implements Serializable {
         this.password = password;
     }
 
-    public Byte getRole() {
+    public Integer getRole() {
         return role;
     }
 
-    public void setRole(Byte role) {
+    public void setRole(Integer role) {
         this.role = role;
     }
 

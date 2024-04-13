@@ -1,10 +1,19 @@
 package com.mizore.easybuy.service.base.impl;
 
+import com.mizore.easybuy.mapper.TbSellerMapper;
+import com.mizore.easybuy.model.dto.UserDTO;
+import com.mizore.easybuy.model.entity.TbSeller;
 import com.mizore.easybuy.model.entity.TbUser;
 import com.mizore.easybuy.mapper.TbUserMapper;
+import com.mizore.easybuy.model.enums.ReturnEnum;
+import com.mizore.easybuy.model.enums.RoleEnum;
+import com.mizore.easybuy.model.vo.BaseVO;
 import com.mizore.easybuy.service.base.ITbUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.mizore.easybuy.utils.UserHolder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
@@ -16,5 +25,41 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class TbUserServiceImpl extends ServiceImpl<TbUserMapper, TbUser> implements ITbUserService {
+
+    @Autowired
+    private TbSellerMapper tbSellerMapper;
+
+    /**
+     * 用户开店
+     */
+    @Transactional
+    public BaseVO openStore(String name, String address) {
+        BaseVO<String> baseVO = new BaseVO<>();
+        // 新增店铺（卖家）
+        TbSeller tbSeller = new TbSeller();
+        // 获取当前登录用户
+        UserDTO userDTO = UserHolder.get();
+        // 判断当前用户角色是否为普通买家，若是，则能够开店，赋予其卖家角色
+        if(RoleEnum.BUYER.getCode().equals(userDTO.getRole())){
+            // 设置卖家对应的用户账号id
+            tbSeller.setUserId(userDTO.getId());
+            // 设置店铺名称
+            tbSeller.setName(name);
+            // 设置店铺地址
+            tbSeller.setAddress(address);
+            // 将新增店铺信息插入数据库
+            tbSellerMapper.insert(tbSeller);
+            // 赋予用户卖家角色，更新数据库中用户信息
+            update().set("role", RoleEnum.SELLER.getCode())
+                    .eq("id",userDTO.getId())
+                    .eq("role", RoleEnum.BUYER.getCode())
+                    .update();
+            return baseVO.success();
+        } else {
+            baseVO.setCode(ReturnEnum.FAILURE.getCode());
+            baseVO.setMessage("Open store failed, role error!");
+            return baseVO;
+        }
+    }
 
 }
