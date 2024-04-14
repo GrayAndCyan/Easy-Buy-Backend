@@ -31,7 +31,7 @@ public class ItemController {
      * @return
      */
     @RequestMapping("/page")
-    public BaseVO<PageResult> page(@RequestBody ItemPageQueryDTO itemPageQueryDTO){
+    public BaseVO<PageResult> page(ItemPageQueryDTO itemPageQueryDTO){
         log.info("商品分页查询：{}",itemPageQueryDTO);
         PageResult pageResult = itemService.page(itemPageQueryDTO);
         return new BaseVO<PageResult>().success(pageResult);
