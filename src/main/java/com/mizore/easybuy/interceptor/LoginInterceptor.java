@@ -29,7 +29,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         UserDTO loginUser = UserDTO.builder()
                 .id((Integer) claims.getOrDefault("id", 0))
                 .username((String) claims.getOrDefault("username", StrUtil.EMPTY))
-                .role((Byte) claims.getOrDefault("role", 1))
+                .role((Integer) claims.getOrDefault("role", 1))
                 .build();
         UserHolder.save(loginUser);
 

@@ -36,6 +36,10 @@ public class JWTUtil {
     }
 
     public static Claims parseJWT(String jwt) {
+        if (secretKey == null) {
+            secretKey = getSecretKey(secretKeyStr);
+        }
+
         return Jwts.parser()
                 .verifyWith(secretKey)
                 .build()
