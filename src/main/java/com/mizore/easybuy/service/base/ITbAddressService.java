@@ -13,4 +13,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ITbAddressService extends IService<TbAddress> {
 
+    int addAddress(TbAddress tbAddress);
+
+    int updateAddress(TbAddress tbAddress);
+
+    int deleteAddress(Integer id);
+
+    TbAddress queryAddress(Integer id);
 }

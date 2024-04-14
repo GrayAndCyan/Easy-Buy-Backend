@@ -16,5 +16,23 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class TbAddressServiceImpl extends ServiceImpl<TbAddressMapper, TbAddress> implements ITbAddressService {
+    @Override
+    public int addAddress(TbAddress tbAddress) {
+        return baseMapper.insert(tbAddress);
+    }
 
+    @Override
+    public int updateAddress(TbAddress tbAddress) {
+        return baseMapper.updateById(tbAddress);
+    }
+
+    @Override
+    public int deleteAddress(Integer id) {
+        return baseMapper.deleteById(id);
+    }
+
+    @Override
+    public TbAddress queryAddress(Integer id) {
+        return baseMapper.selectById(id);
+    }
 }
