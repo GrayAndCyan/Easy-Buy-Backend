@@ -13,4 +13,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ITbCategoryService extends IService<TbCategory> {
 
+    int addCate(TbCategory tbCategory);
+
+    int updateCate(TbCategory tbCategory);
+
+    int deleteCate(Integer id);
+
+    TbCategory queryCate(Integer id);
 }

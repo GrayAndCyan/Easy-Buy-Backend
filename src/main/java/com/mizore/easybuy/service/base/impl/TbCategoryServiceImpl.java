@@ -16,5 +16,23 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class TbCategoryServiceImpl extends ServiceImpl<TbCategoryMapper, TbCategory> implements ITbCategoryService {
+    @Override
+    public int addCate(TbCategory tbCategory){
+        return baseMapper.insert(tbCategory);
+    }
 
+    @Override
+    public int updateCate(TbCategory tbCategory){
+        return baseMapper.updateById(tbCategory);
+    }
+
+    @Override
+    public int deleteCate(Integer id){
+        return baseMapper.deleteById(id);
+    }
+
+    @Override
+    public TbCategory queryCate(Integer id){
+        return baseMapper.selectById(id);
+    }
 }
