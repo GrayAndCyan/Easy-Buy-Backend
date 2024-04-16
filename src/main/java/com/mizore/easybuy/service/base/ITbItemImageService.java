@@ -13,4 +13,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ITbItemImageService extends IService<TbItemImage> {
 
+    String getFirstImgUrl(Integer itemId);
+
 }
