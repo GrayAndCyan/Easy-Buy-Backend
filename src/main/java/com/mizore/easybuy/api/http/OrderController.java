@@ -1,12 +1,12 @@
 package com.mizore.easybuy.api.http;
 
+import com.mizore.easybuy.model.entity.TbOrderDetail;
 import com.mizore.easybuy.model.vo.BaseVO;
 import com.mizore.easybuy.service.business.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -27,6 +27,22 @@ public class OrderController {
     public BaseVO<Object> confirmReceive(@PathVariable(value = "id")Integer orderId) {
         orderService.confirmReceive(orderId);
         return new BaseVO<>().success();
+    }
+
+
+    /**
+     * 用户下单
+     * @param orderedItems 订单中的物品列表
+     * @param addressId 收货地址id
+     * @return
+     * @throws RuntimeException
+     */
+    @PostMapping
+    public BaseVO<Object> placeOrder(
+            @RequestBody List<TbOrderDetail> orderedItems,
+            @RequestParam(value = "addressId") Integer addressId
+            ){
+        return orderService.placeOrder(orderedItems, addressId);
     }
 
 }
