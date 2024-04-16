@@ -3,6 +3,8 @@ package com.mizore.easybuy.service.base;
 import com.mizore.easybuy.model.entity.TbOrder;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 订单表 服务类
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ITbOrderService extends IService<TbOrder> {
 
+    List<TbOrder> search(Integer orderId, Integer userId, List<Integer> status, int sellerId);
 }

@@ -1,7 +1,6 @@
 package com.mizore.easybuy.model.vo;
 
 
-import com.mizore.easybuy.model.dto.Page;
 import com.mizore.easybuy.model.enums.ReturnEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,5 +28,5 @@ public class BasePageVO <T>{
     /**
      * 分页相关信息
      */
-    private Page page;
+    private PageVO page;
 }

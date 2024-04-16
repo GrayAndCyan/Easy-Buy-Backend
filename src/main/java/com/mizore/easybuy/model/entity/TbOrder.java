@@ -47,6 +47,16 @@ public class TbOrder implements Serializable {
      */
     private BigDecimal totalAmount;
 
+    private Integer sellerId;
+
+    public Integer getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(Integer sellerId) {
+        this.sellerId = sellerId;
+    }
+
     /**
      * 软删标识，0：未删除，1：已删除
      */
@@ -107,7 +117,7 @@ public class TbOrder implements Serializable {
         return deleted;
     }
 
-    public void setDeleted(Byte deleted) {
+    public void setDeleted(Byte deletedFIELD) {
         this.deleted = deleted;
     }
 
@@ -130,14 +140,15 @@ public class TbOrder implements Serializable {
     @Override
     public String toString() {
         return "TbOrder{" +
-            "id = " + id +
-            ", userId = " + userId +
-            ", status = " + status +
-            ", addressId = " + addressId +
-            ", totalAmount = " + totalAmount +
-            ", deleted = " + deleted +
-            ", ctime = " + ctime +
-            ", mtime = " + mtime +
-        "}";
+                "id=" + id +
+                ", userId=" + userId +
+                ", status=" + status +
+                ", addressId=" + addressId +
+                ", totalAmount=" + totalAmount +
+                ", sellerId=" + sellerId +
+                ", deleted=" + deleted +
+                ", ctime=" + ctime +
+                ", mtime=" + mtime +
+                '}';
     }
 }

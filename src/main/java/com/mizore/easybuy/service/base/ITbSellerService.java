@@ -1,7 +1,7 @@
 package com.mizore.easybuy.service.base;
 
-import com.mizore.easybuy.model.entity.TbSeller;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mizore.easybuy.model.entity.TbSeller;
 
 /**
  * <p>
@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ITbSellerService extends IService<TbSeller> {
 
+    TbSeller getByOwner(int ownerId);
 }

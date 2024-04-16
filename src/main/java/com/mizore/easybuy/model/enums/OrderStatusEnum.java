@@ -30,4 +30,14 @@ public enum OrderStatusEnum {
     public String getDesc() {
         return desc;
     }
+
+    public static String getDescByCode(Integer code) {
+        OrderStatusEnum[] values = OrderStatusEnum.values();
+        for (OrderStatusEnum status : values) {
+            if (status.code.equals(code)) {
+                return status.getDesc();
+            }
+        }
+        return null;
+    }
 }
