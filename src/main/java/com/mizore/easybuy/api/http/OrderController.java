@@ -61,16 +61,22 @@ public class OrderController {
     /**
      * 用户下单
      * @param orderedItems 订单中的物品列表
-     * @param addressId 收货地址id
+     * @param addrDesc 收货地址描述
+     * @param addrUsername 地址对应的用户名（收货人）
+     * @param addrPhone 手机号
+     * @param sellerId 卖家id
      * @return
      * @throws RuntimeException
      */
     @PostMapping
     public BaseVO<Object> placeOrder(
             @RequestBody List<TbOrderDetail> orderedItems,
-            @RequestParam(value = "addressId") Integer addressId
-            ){
-        return orderService.placeOrder(orderedItems, addressId);
+            @RequestParam(value = "addrDesc") String addrDesc,
+            @RequestParam(value = "addrUsername") String addrUsername,
+            @RequestParam(value = "addrPhone") String addrPhone,
+            @RequestParam(value = "sellerId") Integer sellerId
+            ) {
+        return orderService.placeOrder(orderedItems, addrDesc, addrUsername, addrPhone, sellerId);
     }
 
 }
