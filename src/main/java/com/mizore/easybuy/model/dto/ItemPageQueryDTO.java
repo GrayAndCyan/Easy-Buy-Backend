@@ -9,7 +9,7 @@ public class ItemPageQueryDTO {
     private String title;
 
     //商品分类ID
-    private int categoryId;
+    private Integer categoryId;
 
     //页码
     private int pageNum;

@@ -7,7 +7,7 @@
             <if test="title!=null">
                 and a.title like CONCAT('%',#{title},'%')
             </if>
-            <if test="categoryId!=0">
+            <if test="categoryId!=null">
                 and a.category_id = #{categoryId}
             </if>
                 and a.deleted = 0
