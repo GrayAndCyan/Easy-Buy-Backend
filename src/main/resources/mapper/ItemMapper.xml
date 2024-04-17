@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mizore.easybuy.mapper.ItemMapper">
+    <select id="page" resultType="com.mizore.easybuy.model.entity.ItemAndImage">
+        select a.*,b.url from tb_item a left join tb_item_image b on a.id = b.item_id
+        <where>
+            <if test="title!=null">
+                and a.title like CONCAT('%',#{title},'%')
+            </if>
+            <if test="categoryId!=null">
+                and a.category_id = #{categoryId}
+            </if>
+                and a.deleted = 0
+        </where>
+        order by a.ctime desc
+    </select>
+
+</mapper>

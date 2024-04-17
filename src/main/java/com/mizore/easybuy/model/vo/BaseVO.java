@@ -20,6 +20,13 @@ public class BaseVO<T> {
         return this;
     }
 
+    public BaseVO<T> success(T object) {
+        this.code = ReturnEnum.SUCCESS.getCode();
+        this.message = ReturnEnum.SUCCESS.getMessage();
+        this.data = object;
+        return this;
+    }
+
     public BaseVO<T> failure() {
         this.code = ReturnEnum.FAILURE.getCode();
         this.message = ReturnEnum.FAILURE.getMessage();
