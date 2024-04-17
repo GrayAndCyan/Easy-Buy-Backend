@@ -2,12 +2,15 @@ package com.mizore.easybuy.api.http;
 
 import com.mizore.easybuy.model.dto.ItemPageQueryDTO;
 import com.mizore.easybuy.model.entity.ItemAndImage;
+import com.mizore.easybuy.model.entity.TbItem;
 import com.mizore.easybuy.model.vo.BaseVO;
 import com.mizore.easybuy.model.vo.PageResult;
 import com.mizore.easybuy.service.base.ItemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -47,6 +50,29 @@ public class ItemController {
         log.info("根据商品id查询，id值：{}",id);
         ItemAndImage itemAndImage = itemService.getById(id);
         return new BaseVO<ItemAndImage>().success(itemAndImage);
+    }
+
+    /**
+     * 上架商品
+     * @param tbItem 商品基本信息
+     * @param images 商品图片信息
+     */
+    @PostMapping
+    public BaseVO<Object> addItem(
+            @RequestBody TbItem tbItem,
+            @RequestParam List<String> images
+    ) {
+        return itemService.addItem(tbItem, images);
+    }
+
+    /**
+     * 根据商品id，下架指定商品
+     * @param id 商品id
+     * @throws RuntimeException
+     */
+    @DeleteMapping("/del/{id}")
+    public BaseVO<Object> deleteItem(@PathVariable(value = "id") Integer id) throws Exception {
+        return itemService.deleteItem(id);
     }
 
     @PostMapping("/status/{status}")

@@ -2,7 +2,11 @@ package com.mizore.easybuy.service.base;
 
 import com.mizore.easybuy.model.dto.ItemPageQueryDTO;
 import com.mizore.easybuy.model.entity.ItemAndImage;
+import com.mizore.easybuy.model.entity.TbItem;
+import com.mizore.easybuy.model.vo.BaseVO;
 import com.mizore.easybuy.model.vo.PageResult;
+
+import java.util.List;
 
 public interface ItemService {
 
@@ -26,4 +30,10 @@ public interface ItemService {
      * @return
      */
     ItemAndImage getById(Long id);
+
+    // 上架商品
+    BaseVO<Object> addItem(TbItem tbItem, List<String> images);
+
+    // 下架商品
+    BaseVO<Object> deleteItem(Integer id) throws Exception;
 }
