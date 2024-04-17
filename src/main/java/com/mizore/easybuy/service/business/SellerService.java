@@ -27,6 +27,7 @@ public class SellerService {
         if (sellerId != null) {
             TbSeller tbSeller = new TbSeller();
             tbSeller.setAddress(sellerUpdateQuery.getAddress());
+            tbSeller.setId(sellerId);
             tbSellerService.updateById(tbSeller);
         }
     }

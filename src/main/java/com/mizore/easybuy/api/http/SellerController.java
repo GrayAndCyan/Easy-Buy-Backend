@@ -4,10 +4,7 @@ import com.mizore.easybuy.model.query.SellerUpdateQuery;
 import com.mizore.easybuy.model.vo.BaseVO;
 import com.mizore.easybuy.service.business.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -26,7 +23,7 @@ public class SellerController {
 
     // 修改店铺信息     店名就不让变了吧。。能改的只有地址了目前
     @PostMapping("/update")
-    public BaseVO<Object> update(SellerUpdateQuery sellerUpdateQuery) {
+    public BaseVO<Object> update(@RequestBody SellerUpdateQuery sellerUpdateQuery) {
         sellerService.update(sellerUpdateQuery);
         return new BaseVO<>().success();
     }
