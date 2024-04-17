@@ -81,10 +81,15 @@ public class OrderService {
     }
 
     @Transactional
-    public BaseVO<Object> placeOrder(List<TbOrderDetail> orderedItems, Integer addressId) {
+    public BaseVO<Object> placeOrder(List<TbOrderDetail> orderedItems, String addrDesc,
+                                     String addrUserName, String addrPhone, Integer sellerId) {
         BaseVO<Object> baseVO = new BaseVO<>();
+        // 处理地址相关，得到地址id
+        UserDTO user = UserHolder.get();
+        Integer addressId = tbAddressService.findOrInsertAddr(
+                user.getId(), addrDesc, addrUserName, addrPhone);
 
-        TbOrder tbOrder = doPlaceOrder(orderedItems, addressId);
+        TbOrder tbOrder = doPlaceOrder(orderedItems, addressId, sellerId);
         // 下单失败
         if (tbOrder == null) {
             baseVO.setCode(ReturnEnum.FAILURE.getCode());
@@ -98,7 +103,7 @@ public class OrderService {
         return baseVO;
     }
 
-    private TbOrder doPlaceOrder(List<TbOrderDetail> orderedItems, Integer addressId) {
+    private TbOrder doPlaceOrder(List<TbOrderDetail> orderedItems, Integer addressId, Integer sellerId) {
         // 获得当前下单用户
         UserDTO userDTO = UserHolder.get();
         // 创建一份订单
@@ -109,6 +114,8 @@ public class OrderService {
         tbOrder.setStatus(OrderStatusEnum.PENDING_PAYMENT.getCode());
         // 设置地址
         tbOrder.setAddressId(addressId);
+        // 设置卖家id
+        tbOrder.setSellerId(sellerId);
         // 将订单插入数据库
         tbOrderService.save(tbOrder);
         // 获得订单id

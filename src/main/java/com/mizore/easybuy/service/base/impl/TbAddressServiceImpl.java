@@ -1,5 +1,6 @@
 package com.mizore.easybuy.service.base.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mizore.easybuy.model.entity.TbAddress;
 import com.mizore.easybuy.mapper.TbAddressMapper;
 import com.mizore.easybuy.service.base.ITbAddressService;
@@ -34,5 +35,33 @@ public class TbAddressServiceImpl extends ServiceImpl<TbAddressMapper, TbAddress
     @Override
     public TbAddress queryAddress(Integer id) {
         return baseMapper.selectById(id);
+    }
+
+    /**
+     * 查找或插入地址，并返回地址id
+     * @param userid 用户id
+     * @param address 地址描述
+     * @param username 收货人
+     * @param phone 手机号
+     * @return 地址id
+     */
+    public int findOrInsertAddr(Integer userid, String address, String username, String phone) {
+        // 根据用户id、地址描述以及收货人，查询地址信息是否已存在
+        TbAddress tbAddress = this.getOne(new QueryWrapper<TbAddress>()
+                .eq("user_id", userid)
+                .eq("addr_desc", address)
+                .eq("addr_username", username));
+        // 地址已存在，返回地址id
+        if(tbAddress != null){
+            return tbAddress.getId();
+        }
+        // 地址不存在，向地址表中插入地址并返回地址id todo 暂时没管默认地址的事情
+        TbAddress newAddr = new TbAddress();
+        newAddr.setUserId(userid);
+        newAddr.setAddrDesc(address);
+        newAddr.setAddrUsername(username);
+        newAddr.setAddrPhone(phone);
+        save(newAddr);  // 向地址表中插入地址
+        return newAddr.getId(); // 返回地址id
     }
 }

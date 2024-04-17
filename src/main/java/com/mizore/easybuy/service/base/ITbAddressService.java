@@ -20,4 +20,6 @@ public interface ITbAddressService extends IService<TbAddress> {
     int deleteAddress(Integer id);
 
     TbAddress queryAddress(Integer id);
+
+    int findOrInsertAddr(Integer userid, String address, String username, String phone);
 }
