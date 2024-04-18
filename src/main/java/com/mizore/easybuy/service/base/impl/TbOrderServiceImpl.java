@@ -1,5 +1,6 @@
 package com.mizore.easybuy.service.base.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.mizore.easybuy.model.entity.TbOrder;
 import com.mizore.easybuy.mapper.TbOrderMapper;
@@ -33,10 +34,11 @@ public class TbOrderServiceImpl extends ServiceImpl<TbOrderMapper, TbOrder> impl
             query.eq(TbOrder::getUserId, userId);
         }
 
-        if (status != null) {
+        if (CollectionUtil.isNotEmpty(status)) {
             query.in(TbOrder::getStatus, status);
         }
-
+        // 修改时间倒序
+        query.orderByDesc(TbOrder::getMtime);
         return list(query);
     }
 
@@ -54,9 +56,11 @@ public class TbOrderServiceImpl extends ServiceImpl<TbOrderMapper, TbOrder> impl
             query.eq(TbOrder::getUserId, sellerId);
         }
         // 可选择按订单状态查询
-        if (status != null) {
+        if (CollectionUtil.isNotEmpty(status)) {
             query.in(TbOrder::getStatus, status);
         }
+        // 修改时间倒序
+        query.orderByDesc(TbOrder::getMtime);
         // 返回满足条件的订单列表
         return list(query);
     }
