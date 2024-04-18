@@ -19,5 +19,4 @@ import java.util.List;
  */
 public interface ITbUserService extends IService<TbUser> {
     BaseVO openStore(String name, String address);
-    BasePageVO<List<OrderInfo4UserVO>> searchforuser(Integer orderId, Integer userId, List<Integer> statuses, Integer pageSize, Integer pageNum);
 }
