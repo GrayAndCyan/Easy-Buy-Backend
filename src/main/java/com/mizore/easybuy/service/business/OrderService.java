@@ -13,15 +13,11 @@ import com.google.common.collect.Maps;
 import com.mizore.easybuy.model.entity.*;
 import com.mizore.easybuy.model.enums.OrderStatusEnum;
 import com.mizore.easybuy.model.enums.ReturnEnum;
-import com.mizore.easybuy.model.vo.BaseVO;
+import com.mizore.easybuy.model.vo.*;
 import com.mizore.easybuy.service.base.ITbItemService;
 import com.mizore.easybuy.service.base.ITbOrderDetailService;
 import com.mizore.easybuy.service.base.ITbOrderService;
 import com.mizore.easybuy.utils.UserHolder;
-import com.mizore.easybuy.model.vo.BasePageVO;
-import com.mizore.easybuy.model.vo.OrderDetailVO;
-import com.mizore.easybuy.model.vo.OrderInfo4SellerVO;
-import com.mizore.easybuy.model.vo.PageVO;
 import com.mizore.easybuy.service.base.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -289,5 +285,137 @@ public class OrderService {
             order.setStatus(OrderStatusEnum.SHIPPED.getCode());
             tbOrderService.updateById(order);
         }
+    }
+
+    // 买家按条件查订单
+    public BasePageVO<List<OrderInfo4BuyerVO>> buyerSearch(Integer orderId, Integer sellerId, List<Integer> statuses, Integer pageSize, Integer pageNum) {
+        if (pageSize == null || pageNum == null) {
+            pageSize = 1;
+            pageNum = 10;
+        }
+
+        Page<Object> resPage = PageHelper.startPage(1, 10);
+
+        UserDTO userDTO = UserHolder.get();
+        // 查对应买家用户
+        int userId = -1;
+        if (userDTO != null) {
+            int id = userDTO.getId();
+            TbUser user = tbUserService.getByUser(id);
+            if (user != null) {
+                userId = user.getId();
+            }
+        }
+
+        List<TbOrder> tbOrders = tbOrderService.buyerSearch(orderId, sellerId, statuses, userId);
+
+        // sellerID -> sellerName
+        List<Integer> sellerIds = tbOrders.stream()
+                .map(TbOrder::getSellerId)
+                .toList();
+        Map<Integer, String> sellerMap;
+        if (CollectionUtil.isEmpty(sellerIds)) {
+            sellerMap = Maps.newHashMap();
+            log.error("empty seller ids");
+        } else {
+            List<TbSeller> tbSellers = tbSellerService.searchBySellerIds(sellerIds);
+            sellerMap = tbSellers.stream()
+                    .collect(Collectors.toMap(TbSeller::getUserId, TbSeller::getName));
+        }
+
+        // addrId -> addr
+        List<Integer> addrIds = tbOrders.stream()
+                .map(TbOrder::getAddressId)
+                .toList();
+        Map<Integer, TbAddress> addressMap;
+        if (CollectionUtil.isEmpty(addrIds)) {
+            addressMap = Maps.newHashMap();
+            log.error("empty addr ids");
+        } else {
+            List<TbAddress> tbAddresses = tbAddressService.listByIds(addrIds);
+            addressMap = tbAddresses.stream()
+                    .collect(Collectors.toMap(TbAddress::getId, x -> x));
+        }
+
+        List<Integer> orderIds = tbOrders.stream()
+                .map(TbOrder::getId)
+                .toList();
+        Map<Integer, List<OrderDetailVO>> orderDetialVOMap = Maps.newHashMap();
+        Map<Integer, List<TbOrderDetail>> orderDetialMap = Maps.newHashMap();
+        Map<Integer, TbItem> itemMap = Maps.newHashMap();
+        if (CollectionUtil.isEmpty(orderIds)) {
+            log.error("empty order ids");
+        } else {
+            // orderId -> List<OrderDetailVO>
+            List<TbOrderDetail> tbOrderDetails = tbOrderDetailService.listByOrders(orderIds);
+            // 先批查出涉及的item信息
+            Set<Integer> itemIds = tbOrderDetails.stream()
+                    .map(TbOrderDetail::getItemId)
+                    .collect(Collectors.toSet());
+            if (CollectionUtil.isEmpty(itemIds)) {
+                log.error("empty item ids");
+                itemMap = Maps.newHashMap();
+            } else {
+                List<TbItem> tbItems = tbItemService.listByIds(itemIds);
+                itemMap = tbItems.stream().collect(Collectors.toMap(TbItem::getId, x -> x));
+                // 按照orderId分组
+                orderDetialMap = tbOrderDetails.stream()
+                        .collect(Collectors.groupingBy(TbOrderDetail::getOrderId));
+            }
+        }
+        for (Map.Entry<Integer, List<TbOrderDetail>> orderEntry : orderDetialMap.entrySet()) {
+            // 订单粒度
+            List<TbOrderDetail> detailItems = orderEntry.getValue();
+            Map<Integer, TbItem> finalItemMap = itemMap;
+            List<OrderDetailVO> detailVOS = detailItems.stream().map(
+                    // 订单单品明细粒度
+                    x -> {
+                        Integer itemId = x.getItemId();
+                        TbItem tbItem = finalItemMap.get(itemId);
+                        return OrderDetailVO.builder()
+                                .itemId(itemId)
+                                .imgUrl(tbItemImageService.getFirstImgUrl(itemId)) // todo 可优化
+                                .itemDesc(tbItem.getDescription())
+                                .unitPrice(tbItem.getPrice())
+                                .subtotal(x.getSubtotal())
+                                .quantity(x.getQuantity())
+                                .build();
+                    }
+            ).toList();
+            orderDetialVOMap.put(orderEntry.getKey(), detailVOS);
+        }
+
+        // convert to VO
+        List<OrderInfo4BuyerVO> res = Lists.newArrayList();
+        for (TbOrder tbOrder : tbOrders) {
+            Integer orderStatus = tbOrder.getStatus();
+            TbAddress tbAddress = addressMap.get(tbOrder.getAddressId());
+            Integer tbOrderId = tbOrder.getId();
+            OrderInfo4BuyerVO orderInfo = OrderInfo4BuyerVO.builder()
+                    .content(orderDetialVOMap.getOrDefault(tbOrderId, Lists.newArrayList()))
+                    .id(tbOrderId)
+                    .ctime(tbOrder.getCtime())
+
+                    .status(orderStatus)
+                    .statusDesc(OrderStatusEnum.getDescByCode(orderStatus))
+
+                    .sellerId(tbOrder.getSellerId())
+                    .sellerName(sellerMap.getOrDefault(tbOrder.getSellerId(), StrUtil.EMPTY))
+
+                    .addressId(tbOrder.getAddressId())
+                    .addrDesc(tbAddress != null ? tbAddress.getAddrDesc() : StrUtil.EMPTY)
+                    .addrUsername(tbAddress != null ? tbAddress.getAddrUsername() : StrUtil.EMPTY)
+                    .addrPhone(tbAddress != null ? tbAddress.getAddrPhone() : StrUtil.EMPTY)
+                    .build();
+            res.add(orderInfo);
+        }
+
+        BasePageVO<List<OrderInfo4BuyerVO>> basePageVO = new BasePageVO<List<OrderInfo4BuyerVO>>().success();
+        basePageVO.setData(res);
+        PageVO pageVO = new PageVO(pageSize, pageNum);
+        pageVO.setPages(resPage.getPages());
+        pageVO.setTotal(resPage.getTotal());
+        basePageVO.setPage(pageVO);
+        return basePageVO;
     }
 }

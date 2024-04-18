@@ -39,4 +39,25 @@ public class TbOrderServiceImpl extends ServiceImpl<TbOrderMapper, TbOrder> impl
 
         return list(query);
     }
+
+    @Override
+    public List<TbOrder> buyerSearch(Integer orderId, Integer sellerId, List<Integer> status, int userId) {
+        // 查询当前用户的订单
+        LambdaQueryWrapper<TbOrder> query = new LambdaQueryWrapper<TbOrder>()
+                .eq(TbOrder::getUserId, userId);
+        // 可选择按订单号查询
+        if (orderId != null) {
+            query.eq(TbOrder::getId, orderId);
+        }
+        // 可选择按店铺（卖家）查询
+        if (sellerId != null) {
+            query.eq(TbOrder::getUserId, sellerId);
+        }
+        // 可选择按订单状态查询
+        if (status != null) {
+            query.in(TbOrder::getStatus, status);
+        }
+        // 返回满足条件的订单列表
+        return list(query);
+    }
 }
