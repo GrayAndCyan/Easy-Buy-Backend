@@ -4,10 +4,12 @@ import com.mizore.easybuy.model.entity.TbOrderDetail;
 import com.mizore.easybuy.model.vo.BasePageVO;
 import com.mizore.easybuy.model.vo.BaseVO;
 import com.mizore.easybuy.model.vo.OrderInfo4SellerVO;
+import com.mizore.easybuy.model.vo.OrderInfo4UserVO;
+import com.mizore.easybuy.service.base.impl.TbUserServiceImpl;
 import com.mizore.easybuy.service.business.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import com.mizore.easybuy.service.business.OrderServiceforuser;
 import java.util.List;
 
 /**
@@ -49,6 +51,19 @@ public class OrderController {
     ) {
         return orderService.search(orderId, userId, statuses, pageSize, pageNum);
     }
+
+    @GetMapping("/order/user/search")
+    public BasePageVO<List<OrderInfo4UserVO>> searchuserOrder(
+            @RequestParam(value = "orderId", required = false) Integer orderId,
+            @RequestParam(value = "userId") Integer userId,
+            @RequestParam(value = "statuses", required = false) List<Integer> statuses,
+            @RequestParam(value = "pageSize") Integer pageSize,
+            @RequestParam(value = "pageNum") Integer pageNum
+    ) {
+        return orderService.searchforuser(orderId, userId, statuses, pageSize, pageNum);
+    }
+
+
 
     // 卖家发货
     @PostMapping("/seller/send/{orderId}")

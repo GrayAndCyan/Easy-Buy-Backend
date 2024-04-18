@@ -4,8 +4,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/EasyBuy?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: mizore
-    password: mizore
+    username: root
+    password: 1234
 
   jackson:
     default-property-inclusion: non_null # JSON处理时忽略非空字段
