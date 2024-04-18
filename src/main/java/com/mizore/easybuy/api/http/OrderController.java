@@ -30,8 +30,6 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
-    @Autowired
-    private OrderServiceforuser orderServiceforuser;
 
     @PostMapping("/buyer/confirm/{id}")
     public BaseVO<Object> confirmReceive(@PathVariable(value = "id")Integer orderId) {
@@ -58,7 +56,7 @@ public class OrderController {
         return orderService.search(orderId, userId, statuses, pageSize, pageNum);
     }
 
-    @GetMapping("/user/search")
+    @GetMapping("/order/user/search")
     public BasePageVO<List<OrderInfo4UserVO>> searchuserOrder(
             @RequestParam(value = "orderId", required = false) Integer orderId,
             @RequestParam(value = "userId") Integer userId,
@@ -66,7 +64,7 @@ public class OrderController {
             @RequestParam(value = "pageSize") Integer pageSize,
             @RequestParam(value = "pageNum") Integer pageNum
     ) {
-        return orderServiceforuser.searchforuser(orderId, userId, statuses, pageSize, pageNum);
+        return orderService.searchforuser(orderId, userId, statuses, pageSize, pageNum);
     }
 
 
