@@ -1,79 +1,39 @@
-package com.mizore.easybuy.service.base.impl;
+package com.mizore.easybuy.service.business;
 
+import com.mizore.easybuy.model.dto.UserDTO;
+import com.mizore.easybuy.model.entity.TbItem;
+import com.mizore.easybuy.model.entity.TbOrder;
+import com.mizore.easybuy.model.entity.TbOrderDetail;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.mizore.easybuy.mapper.TbSellerMapper;
-import com.mizore.easybuy.model.dto.UserDTO;
 import com.mizore.easybuy.model.entity.*;
-import com.mizore.easybuy.mapper.TbUserMapper;
 import com.mizore.easybuy.model.enums.OrderStatusEnum;
 import com.mizore.easybuy.model.enums.ReturnEnum;
-import com.mizore.easybuy.model.enums.RoleEnum;
 import com.mizore.easybuy.model.vo.*;
-import com.mizore.easybuy.service.base.*;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.mizore.easybuy.service.base.ITbItemService;
+import com.mizore.easybuy.service.base.ITbOrderDetailService;
+import com.mizore.easybuy.service.base.ITbOrderService;
 import com.mizore.easybuy.utils.UserHolder;
+import com.mizore.easybuy.service.base.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
+
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * <p>
- * 用户表 服务实现类
- * </p>
- *
- * @author mizore
- * @since 2024-04-06
- */
-@Service
-public class TbUserServiceImpl extends ServiceImpl<TbUserMapper, TbUser> implements ITbUserService {
-
-    @Autowired
-    private TbSellerMapper tbSellerMapper;
-
-    /**
-     * 用户开店
-     */
-    @Transactional
-    public BaseVO openStore(String name, String address) {
-        BaseVO<String> baseVO = new BaseVO<>();
-        // 新增店铺（卖家）
-        TbSeller tbSeller = new TbSeller();
-        // 获取当前登录用户
-        UserDTO userDTO = UserHolder.get();
-        // 判断当前用户角色是否为普通买家，若是，则能够开店，赋予其卖家角色
-        if(RoleEnum.BUYER.getCode().equals(userDTO.getRole())){
-            // 设置卖家对应的用户账号id
-            tbSeller.setUserId(userDTO.getId());
-            // 设置店铺名称
-            tbSeller.setName(name);
-            // 设置店铺地址
-            tbSeller.setAddress(address);
-            // 将新增店铺信息插入数据库
-            tbSellerMapper.insert(tbSeller);
-            // 赋予用户卖家角色，更新数据库中用户信息
-            update().set("role", RoleEnum.SELLER.getCode())
-                    .eq("id",userDTO.getId())
-                    .eq("role", RoleEnum.BUYER.getCode())
-                    .update();
-            return baseVO.success();
-        } else {
-            baseVO.setCode(ReturnEnum.FAILURE.getCode());
-            baseVO.setMessage("Open store failed, role error!");
-            return baseVO;
-        }
-    }
-
+public class OrderServiceforuser {
     @Autowired
     private ITbSellerService tbSellerService;
 
@@ -122,7 +82,7 @@ public class TbUserServiceImpl extends ServiceImpl<TbUserMapper, TbUser> impleme
         Map<Integer, String> userMap;
         if (CollectionUtil.isEmpty(userIds)) {
             userMap = Maps.newHashMap();
-            log.error("empty user ids");
+            //log.error("empty user ids");
         } else {
             List<TbUser> tbUsers = tbUserService.listByIds(userIds);
             userMap = tbUsers.stream()
@@ -136,7 +96,7 @@ public class TbUserServiceImpl extends ServiceImpl<TbUserMapper, TbUser> impleme
         Map<Integer, TbAddress> addressMap;
         if (CollectionUtil.isEmpty(addrIds)) {
             addressMap = Maps.newHashMap();
-            log.error("empty addr ids");
+            //log.error("empty addr ids");
         } else {
             List<TbAddress> tbAddresses = tbAddressService.listByIds(addrIds);
             addressMap = tbAddresses.stream()
@@ -150,7 +110,7 @@ public class TbUserServiceImpl extends ServiceImpl<TbUserMapper, TbUser> impleme
         Map<Integer, List<TbOrderDetail>> orderDetialMap = Maps.newHashMap();
         Map<Integer, TbItem> itemMap = Maps.newHashMap();
         if (CollectionUtil.isEmpty(orderIds)) {
-            log.error("empty order ids");
+            //log.error("empty order ids");
         } else {
             // orderId -> List<OrderDetailVO>
             List<TbOrderDetail> tbOrderDetails = tbOrderDetailService.listByOrders(orderIds);
@@ -159,7 +119,7 @@ public class TbUserServiceImpl extends ServiceImpl<TbUserMapper, TbUser> impleme
                     .map(TbOrderDetail::getItemId)
                     .collect(Collectors.toSet());
             if (CollectionUtil.isEmpty(itemIds)) {
-                log.error("empty item ids");
+                //log.error("empty item ids");
                 itemMap = Maps.newHashMap();
             } else {
                 List<TbItem> tbItems = tbItemService.listByIds(itemIds);
@@ -224,5 +184,4 @@ public class TbUserServiceImpl extends ServiceImpl<TbUserMapper, TbUser> impleme
         basePageVO.setPage(pageVO);
         return basePageVO;
     }
-
 }
