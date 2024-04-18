@@ -9,6 +9,8 @@ import com.mizore.easybuy.model.dto.UserDTO;
 import com.mizore.easybuy.model.entity.ItemAndImage;
 import com.mizore.easybuy.model.entity.TbItem;
 import com.mizore.easybuy.model.entity.TbItemImage;
+import com.mizore.easybuy.model.enums.ReturnEnum;
+import com.mizore.easybuy.model.enums.RoleEnum;
 import com.mizore.easybuy.model.vo.BaseVO;
 import com.mizore.easybuy.model.vo.PageResult;
 import com.mizore.easybuy.service.base.ITbItemImageService;
@@ -82,7 +84,12 @@ public class ItemServiceImpl implements ItemService {
         BaseVO<Object> baseVO = new BaseVO<>();
         // 获取当前登录用户
         UserDTO user = UserHolder.get();
-        // todo 普通买家用户不能添加商品
+        // 普通买家用户不能添加商品
+        if(RoleEnum.BUYER.getCode().equals(user.getRole())){
+            baseVO.setMessage("role error")
+                    .setCode(ReturnEnum.FAILURE.getCode());
+            return baseVO;
+        }
         // 设置上架商品对应的卖家id
         tbItem.setSellerId(user.getId());
         // 将新增商品插入商品表

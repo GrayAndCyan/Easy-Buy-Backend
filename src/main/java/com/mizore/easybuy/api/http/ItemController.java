@@ -70,7 +70,7 @@ public class ItemController {
      * @param id 商品id
      * @throws RuntimeException
      */
-    @DeleteMapping("/del/{id}")
+    @DeleteMapping("/{id}")
     public BaseVO<Object> deleteItem(@PathVariable(value = "id") Integer id) throws Exception {
         return itemService.deleteItem(id);
     }
