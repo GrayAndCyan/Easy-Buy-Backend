@@ -15,4 +15,13 @@
         order by a.ctime desc
     </select>
 
+    <update id="UpdateItemStatus">
+        update tb_item
+        <set>
+            status = #{status},
+            mtime = #{mtime}
+        </set>
+        where id = #{id}
+    </update>
+
 </mapper>

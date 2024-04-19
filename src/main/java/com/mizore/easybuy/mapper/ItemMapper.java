@@ -24,4 +24,10 @@ public interface ItemMapper {
     @Select("select a.*,b.url from tb_item a left join tb_item_image b on a.id = b.item_id " +
             "where a.id = #{id}")
     ItemAndImage getById(Long id);
+
+    /**
+     * 根据商品id修改商品status
+     * @param itemAndImage
+     */
+    void UpdateItemStatus(ItemAndImage itemAndImage);
 }

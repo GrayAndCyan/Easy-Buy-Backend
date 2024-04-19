@@ -49,4 +49,11 @@ public class ItemController {
         return new BaseVO<ItemAndImage>().success(itemAndImage);
     }
 
+    @PostMapping("/status/{status}")
+    public BaseVO UpdateItemStatus(@PathVariable Integer status,Integer id){
+        log.info("根据商品id修改商品上下架状态，status值为：{},id值为：{}，",status,id);
+        itemService.UpdateItemStatus(status,id);
+        return new BaseVO().success();
+    }
+
 }

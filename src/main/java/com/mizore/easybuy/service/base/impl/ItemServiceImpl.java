@@ -11,12 +11,28 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @Slf4j
 public class ItemServiceImpl implements ItemService {
 
     @Autowired
     private ItemMapper itemMapper;
+
+    /**
+     * 根据商品id修改商品status
+     * @param status
+     * @param id
+     */
+    @Override
+    public void UpdateItemStatus(Integer status, Integer id) {
+        ItemAndImage itemAndImage = new ItemAndImage();
+        itemAndImage.setId(id);
+        itemAndImage.setStatus(status);
+        itemAndImage.setMtime(LocalDateTime.now());
+        itemMapper.UpdateItemStatus(itemAndImage);
+    }
 
     /**
      * 商品分页查询
