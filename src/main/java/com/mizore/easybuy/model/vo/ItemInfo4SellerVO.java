@@ -29,6 +29,9 @@ public class ItemInfo4SellerVO {
     // 定价
     private BigDecimal price;
 
+    // 库存
+    private Integer stock;
+
     // 状态
     private Integer status;
 

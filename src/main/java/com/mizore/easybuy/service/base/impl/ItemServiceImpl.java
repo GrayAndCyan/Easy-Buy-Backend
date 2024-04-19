@@ -164,6 +164,7 @@ public class ItemServiceImpl implements ItemService {
                     .title(item.getTitle())
                     .description(item.getDescription())
                     .price(item.getPrice())
+                    .stock(item.getStock())
 
                     .status(item.getStatus())
                     .statusDesc(ItemStatusEnum.getDescByCode(item.getStatus()))
