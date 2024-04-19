@@ -172,6 +172,7 @@ public class TbItem implements Serializable {
             ", categoryId = " + categoryId +
             ", price = " + price +
             ", stock = " + stock +
+            ", status = " + status +
             ", deleted = " + deleted +
             ", ctime = " + ctime +
             ", mtime = " + mtime +
