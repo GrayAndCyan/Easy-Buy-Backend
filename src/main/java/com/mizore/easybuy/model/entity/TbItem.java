@@ -58,6 +58,11 @@ public class TbItem implements Serializable {
     private Integer stock;
 
     /**
+     * 商品上下架状态
+     */
+    private Integer status;
+
+    /**
      * 软删标识，0：未删除，1：已删除
      */
     @TableLogic
@@ -128,6 +133,10 @@ public class TbItem implements Serializable {
     public void setStock(Integer stock) {
         this.stock = stock;
     }
+
+    public Integer getStatus() { return status; }
+
+    public void setStatus(Integer status) { this.status = status; }
 
     public Byte getDeleted() {
         return deleted;
