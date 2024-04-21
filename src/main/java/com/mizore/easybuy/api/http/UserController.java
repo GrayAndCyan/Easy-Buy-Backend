@@ -40,7 +40,7 @@ public class UserController {
         return tbUserService.openStore(name, address);
     }
 
-    @PostMapping("/login")
+/*    @PostMapping("/login")
     public Result_login loginController(@RequestParam("username") String username, @RequestParam("password") String password){
         Result_login result = tbUserService.loginService(username, password);
         return result;
@@ -51,6 +51,6 @@ public class UserController {
         Result_register result = new Result_register();
         result = tbUserService.registerService(username, password);
         return result;
-    }
+    }*/
 
 }

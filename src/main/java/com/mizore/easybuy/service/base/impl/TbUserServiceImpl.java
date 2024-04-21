@@ -1,6 +1,6 @@
 package com.mizore.easybuy.service.base.impl;
 
-import com.beust.jcommander.internal.Maps;
+import com.google.common.collect.Maps;
 import com.mizore.easybuy.mapper.TbSellerMapper;
 import com.mizore.easybuy.model.dto.UserDTO;
 import com.mizore.easybuy.model.entity.TbSeller;
@@ -67,7 +67,7 @@ public class TbUserServiceImpl extends ServiceImpl<TbUserMapper, TbUser> impleme
     }
 
 
-    //@Autowired
+    @Autowired
     TbUserMapper userMapper;
     //返回注册结果
     // @Override
