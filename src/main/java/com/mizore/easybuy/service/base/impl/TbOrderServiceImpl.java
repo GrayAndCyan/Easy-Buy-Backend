@@ -39,4 +39,23 @@ public class TbOrderServiceImpl extends ServiceImpl<TbOrderMapper, TbOrder> impl
 
         return list(query);
     }
+
+    @Override
+    public List<TbOrder> searchforuser(Integer orderId, Integer userId, List<Integer> status) {
+        LambdaQueryWrapper<TbOrder> query = new LambdaQueryWrapper<TbOrder>()
+                .eq(TbOrder::getUserId, userId);
+
+        if (orderId != null) {
+            query.eq(TbOrder::getId, orderId);
+        }
+
+        if (status != null) {
+            query.in(TbOrder::getStatus, status);
+        }
+
+        return list(query);
+    }
+
+
+
 }
