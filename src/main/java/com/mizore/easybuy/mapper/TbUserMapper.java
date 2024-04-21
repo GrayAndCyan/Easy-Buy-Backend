@@ -2,6 +2,10 @@ package com.mizore.easybuy.mapper;
 
 import com.mizore.easybuy.model.entity.TbUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.catalina.User;
+import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +17,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface TbUserMapper extends BaseMapper<TbUser> {
 
+    List<TbUser> login(String username, String password);
+
+    boolean register_user(TbUser user);
+
+    List<TbUser> username_exist(String username);
 }

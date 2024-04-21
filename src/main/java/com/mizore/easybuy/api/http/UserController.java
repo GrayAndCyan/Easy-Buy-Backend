@@ -1,5 +1,7 @@
 package com.mizore.easybuy.api.http;
 
+import com.mizore.easybuy.model.enums.Result_login;
+import com.mizore.easybuy.model.enums.Result_register;
 import com.mizore.easybuy.model.vo.BaseVO;
 import com.mizore.easybuy.service.base.ITbUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,19 @@ public class UserController {
             @RequestParam(value = "address") String address
     ){
         return tbUserService.openStore(name, address);
+    }
+
+    @PostMapping("/login")
+    public Result_login loginController(@RequestParam("username") String username, @RequestParam("password") String password){
+        Result_login result = tbUserService.loginService(username, password);
+        return result;
+    }
+
+    @PostMapping("/register")
+    public Result_register registerController(@RequestParam("username") String username, @RequestParam("password") String password) {
+        Result_register result = new Result_register();
+        result = tbUserService.registerService(username, password);
+        return result;
     }
 
 }
