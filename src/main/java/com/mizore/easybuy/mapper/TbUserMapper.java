@@ -15,6 +15,7 @@ import java.util.List;
  * @author mizore
  * @since 2024-04-06
  */
+@Mapper
 public interface TbUserMapper extends BaseMapper<TbUser> {
 
     List<TbUser> login(String username, String password);

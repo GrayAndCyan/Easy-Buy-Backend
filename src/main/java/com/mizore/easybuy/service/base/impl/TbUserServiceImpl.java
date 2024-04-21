@@ -2,7 +2,7 @@ package com.mizore.easybuy.service.base.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.beust.jcommander.internal.Maps;
+import com.google.common.collect.Maps;
 import com.mizore.easybuy.mapper.TbSellerMapper;
 import com.mizore.easybuy.model.dto.UserDTO;
 import com.mizore.easybuy.model.entity.TbSeller;
@@ -87,8 +87,8 @@ public class TbUserServiceImpl extends ServiceImpl<TbUserMapper, TbUser> impleme
     }
 
 
-    //@Autowired
-    TbUserMapper userMapper;
+    @Autowired
+    private TbUserMapper userMapper;
     //返回注册结果
     // @Override
     public Result_register registerService(String username, String password)
