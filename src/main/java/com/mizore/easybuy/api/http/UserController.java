@@ -4,6 +4,8 @@ import com.mizore.easybuy.model.enums.Result_login;
 import com.mizore.easybuy.model.enums.Result_register;
 import com.mizore.easybuy.model.vo.BaseVO;
 import com.mizore.easybuy.service.base.ITbUserService;
+import com.mizore.easybuy.service.business.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +28,9 @@ public class UserController {
     @Autowired
     private ITbUserService tbUserService;
 
+    @Autowired
+    private UserService userService;
+
     /**
      * 用户“我要开店”
      * @param name 店铺名称
@@ -41,16 +46,15 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Result_login loginController(@RequestParam("username") String username, @RequestParam("password") String password){
-        Result_login result = tbUserService.loginService(username, password);
-        return result;
+    public BaseVO<String> login(
+            @RequestParam("username") String username,
+            @RequestParam("password") String password,
+            HttpServletResponse response){
+        return userService.login(username, password, response);
     }
 
     @PostMapping("/register")
-    public Result_register registerController(@RequestParam("username") String username, @RequestParam("password") String password) {
-        Result_register result = new Result_register();
-        result = tbUserService.registerService(username, password);
-        return result;
+    public BaseVO<Object> register(@RequestParam("username") String username, @RequestParam("password") String password) {
+        return userService.register(username, password);
     }
-
 }
