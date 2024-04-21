@@ -1,7 +1,7 @@
 package com.mizore.easybuy.api.http;
 
-import com.alipay.api.AlipayApiException;
-import com.alipay.api.internal.util.AlipaySignature;
+//import com.alipay.api.AlipayApiException;
+//import com.alipay.api.internal.util.AlipaySignature;
 import com.google.common.collect.Maps;
 import com.mizore.easybuy.config.AliPayConfig;
 import com.mizore.easybuy.model.query.PayQuery;
@@ -37,14 +37,14 @@ public class PayController {
     /**
      * 支付成功回调
      */
-    @PostMapping("/callback")
+    /*@PostMapping("/callback")
     public void payCallBack(HttpServletRequest request){
         try {
             payService.payCallBack(request);
         } catch (AlipayApiException e) {
             log.error("支付回调异常");
         }
-    }
+    }*/
 
 
 

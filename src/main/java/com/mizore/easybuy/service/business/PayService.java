@@ -1,6 +1,5 @@
 package com.mizore.easybuy.service.business;
 
-
 import cn.hutool.http.server.HttpServerRequest;
 import cn.hutool.json.JSONObject;
 import com.alipay.api.AlipayApiException;
@@ -40,6 +39,7 @@ public class PayService {
     private static final String FORMAT = "JSON";
 
     private static final String CHARSET = "UTF-8";
+
 
     //签名方式
     private static final String SIGN_TYPE = "RSA2";
@@ -100,6 +100,9 @@ public class PayService {
             log.error("支付宝验签失败， req: {}", requestParams);
             return;
         }*/
+
+
+
         // 验签通过
         log.info("交易名称: {}，交易状态: {}，支付宝交易凭证号: {}，商户订单号: {}，交易金额: {}，买家在支付宝唯一id: {}，买家付款时间: {}，买家付款金额: {}",
                 params.get("subject"), params.get("trade_status"), params.get("trade_no"), params.get("out_trade_no"),

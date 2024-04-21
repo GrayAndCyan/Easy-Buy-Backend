@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mizore.easybuy.mapper.TbUserMapper">
+    <select id="login" resultType="com.mizore.easybuy.model.entity.TbUser">
+        select * from tb_user
+        where username=#{username}
+          and password=#{password}
+    </select>
 
+    <select id="username_exist" parameterType="String" resultType="com.mizore.easybuy.model.entity.TbUser">
+        select * from tb_user
+        where username=#{username}
+    </select>
+
+    <insert id="register_user" parameterType="com.mizore.easybuy.model.entity.TbUser">
+        insert into tb_user (id, username, password, role, deleted, ctime, mtime) values
+            (null, #{username}, #{password}, #{role}, #{deleted}, now(), now())
+    </insert>
 </mapper>
