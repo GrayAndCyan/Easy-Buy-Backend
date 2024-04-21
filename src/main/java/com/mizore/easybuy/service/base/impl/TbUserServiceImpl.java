@@ -1,5 +1,7 @@
 package com.mizore.easybuy.service.base.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.beust.jcommander.internal.Maps;
 import com.mizore.easybuy.mapper.TbSellerMapper;
 import com.mizore.easybuy.model.dto.UserDTO;
@@ -15,12 +17,15 @@ import com.mizore.easybuy.service.base.ITbUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mizore.easybuy.utils.JWTUtil;
 import com.mizore.easybuy.utils.UserHolder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+
+import java.util.Arrays;
 
 /**
  * <p>
@@ -31,11 +36,26 @@ import java.util.Map;
  * @since 2024-04-06
  */
 @Service
+@Slf4j
 public class TbUserServiceImpl extends ServiceImpl<TbUserMapper, TbUser> implements ITbUserService {
 
     @Autowired
     private TbSellerMapper tbSellerMapper;
 
+    @Override
+    public TbUser getByUser(int userId) {
+        LambdaQueryWrapper<TbUser> query = new LambdaQueryWrapper<TbUser>()
+                .eq(TbUser::getId, userId);
+        List<TbUser> res = list(query);
+        if (res != null && res.size() > 1) {
+            log.error("存在脏数据 buyer: {}", Arrays.toString(res.toArray()));
+        }
+        return CollectionUtil.isEmpty(res) ? null : res.get(0);
+    }
+
+    /**
+     * 用户开店
+     */
     @Transactional
     public BaseVO openStore(String name, String address) {
         BaseVO<String> baseVO = new BaseVO<>();

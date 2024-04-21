@@ -1,10 +1,15 @@
 package com.mizore.easybuy.api.http;
 
+import cn.hutool.core.collection.CollectionUtil;
+import com.google.common.collect.Lists;
 import com.mizore.easybuy.model.entity.TbOrderDetail;
+import com.mizore.easybuy.model.enums.OrderStatusEnum;
 import com.mizore.easybuy.model.vo.BasePageVO;
 import com.mizore.easybuy.model.vo.BaseVO;
+import com.mizore.easybuy.model.vo.OrderInfo4BuyerVO;
 import com.mizore.easybuy.model.vo.OrderInfo4SellerVO;
 import com.mizore.easybuy.service.business.OrderService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +24,7 @@ import java.util.List;
  * @since 2024-04-06
  */
 @RestController
+@Slf4j
 @RequestMapping("/order")
 public class OrderController {
 
@@ -44,8 +50,8 @@ public class OrderController {
             @RequestParam(value = "orderId", required = false) Integer orderId,
             @RequestParam(value = "userId", required = false) Integer userId,
             @RequestParam(value = "statuses", required = false) List<Integer> statuses,
-            @RequestParam(value = "pageSize") Integer pageSize,
-            @RequestParam(value = "pageNum") Integer pageNum
+            @RequestParam(value = "pageSize", required = false) Integer pageSize,
+            @RequestParam(value = "pageNum", required = false) Integer pageNum
     ) {
         return orderService.search(orderId, userId, statuses, pageSize, pageNum);
     }
@@ -77,6 +83,47 @@ public class OrderController {
             @RequestParam(value = "sellerId") Integer sellerId
             ) {
         return orderService.placeOrder(orderedItems, addrDesc, addrUsername, addrPhone, sellerId);
+    }
+
+    /**
+     * 买家按条件查订单，没有传的条件则表示不做条件过滤
+     * @param orderId 订单号
+     * @param sellerId 按卖家
+     * @param statuses 按订单状态 可以传多个 查多个状态的
+     * @param pageSize 页大小
+     * @param pageNum 页码
+     */
+    @GetMapping("/buyer/search")
+    public BasePageVO<List<OrderInfo4BuyerVO>> buyerSearchOrder(
+            @RequestParam(value = "orderId", required = false) Integer orderId,
+            @RequestParam(value = "sellerId", required = false) Integer sellerId,
+            @RequestParam(value = "statuses", required = false) List<Integer> statuses,
+            @RequestParam(value = "pageSize", required = false) Integer pageSize,
+            @RequestParam(value = "pageNum", required = false) Integer pageNum
+    ) {
+        return orderService.buyerSearch(orderId, sellerId, statuses, pageSize, pageNum);
+    }
+
+    // 查指定状态中的最新一条订单
+    @GetMapping("/buyer/lastorder")
+    public BaseVO<OrderInfo4BuyerVO> buyerSearchTheLastOrder(
+            @RequestParam(value = "orderId", required = false) Integer orderId,
+            @RequestParam(value = "statuses", required = false) List<Integer> statuses
+    ) {
+/*        if (CollectionUtil.isEmpty(statuses)) {
+            // 没传就默认查一条待收货的
+            statuses = Lists.newArrayList(OrderStatusEnum.SHIPPED.getCode());
+        }*/
+        BasePageVO<List<OrderInfo4BuyerVO>> basePageVO = orderService.buyerSearch(orderId, null, statuses, 1, Integer.MAX_VALUE);
+        List<OrderInfo4BuyerVO> orders = basePageVO.getData();
+
+        BaseVO<OrderInfo4BuyerVO> baseVO = new BaseVO<OrderInfo4BuyerVO>().success();
+        if (CollectionUtil.isEmpty(orders)) {
+            log.info("buyerSearchTheLastOrder#buyerSearchTheLastOrder: CollectionUtil.isEmpty(orders)");
+            return baseVO;
+        }
+        baseVO.setData(orders.get(0));  // orders 按修改时间倒序，故取第一条即可
+        return baseVO;
     }
 
 }
