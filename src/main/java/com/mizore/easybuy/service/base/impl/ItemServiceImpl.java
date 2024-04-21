@@ -98,6 +98,8 @@ public class ItemServiceImpl implements ItemService {
         }
         // 设置上架商品对应的卖家id
         tbItem.setSellerId(user.getId());
+        // 将商品状态设置为“下架”
+        tbItem.setStatus(ItemStatusEnum.OUT_SALE.getCode());
         // 将新增商品插入商品表
         tbItemService.save(tbItem);
         // 获得新增商品id
