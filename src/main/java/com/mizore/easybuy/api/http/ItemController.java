@@ -2,8 +2,10 @@ package com.mizore.easybuy.api.http;
 
 import com.mizore.easybuy.model.dto.ItemPageQueryDTO;
 import com.mizore.easybuy.model.entity.ItemAndImage;
+import com.mizore.easybuy.model.vo.BasePageVO;
 import com.mizore.easybuy.model.entity.TbItem;
 import com.mizore.easybuy.model.vo.BaseVO;
+import com.mizore.easybuy.model.vo.ItemInfo4SellerVO;
 import com.mizore.easybuy.model.vo.PageResult;
 import com.mizore.easybuy.service.base.ItemService;
 import lombok.extern.slf4j.Slf4j;
@@ -80,6 +82,25 @@ public class ItemController {
         log.info("根据商品id修改商品上下架状态，status值为：{},id值为：{}，",status,id);
         itemService.UpdateItemStatus(status,id);
         return new BaseVO().success();
+    }
+
+    /**
+     * 商家根据条件查询商品信息，没有传的条件不做过滤
+     * @param categoryId 分类id
+     * @param statuses 按商品状态 可以传多个 查多个状态的
+     * @param keyword 商品名称（模糊查询）
+     * @param pageSize 页大小
+     * @param pageNum 页码
+     */
+    @GetMapping("/management")
+    public BasePageVO<List<ItemInfo4SellerVO>> sellerGetItems(
+            @RequestParam(value = "categoryId", required = false) Integer categoryId,
+            @RequestParam(value = "statuses", required = false) List<Integer> statuses,
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "pageSize", required = false) Integer pageSize,
+            @RequestParam(value = "pageNum", required = false) Integer pageNum
+            ) {
+        return itemService.sellerGetItems(categoryId, statuses, keyword, pageSize, pageNum);
     }
 
 }

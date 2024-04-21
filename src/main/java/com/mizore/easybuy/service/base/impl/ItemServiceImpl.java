@@ -3,16 +3,24 @@ package com.mizore.easybuy.service.base.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.google.common.collect.Lists;
 import com.mizore.easybuy.mapper.ItemMapper;
 import com.mizore.easybuy.model.dto.ItemPageQueryDTO;
 import com.mizore.easybuy.model.dto.UserDTO;
 import com.mizore.easybuy.model.entity.ItemAndImage;
+import com.mizore.easybuy.model.entity.TbItem;
+import com.mizore.easybuy.model.enums.ItemStatusEnum;
+import com.mizore.easybuy.model.vo.BasePageVO;
+import com.mizore.easybuy.model.vo.ItemInfo4SellerVO;
 import com.mizore.easybuy.model.entity.TbItem;
 import com.mizore.easybuy.model.entity.TbItemImage;
 import com.mizore.easybuy.model.enums.ReturnEnum;
 import com.mizore.easybuy.model.enums.RoleEnum;
 import com.mizore.easybuy.model.vo.BaseVO;
 import com.mizore.easybuy.model.vo.PageResult;
+import com.mizore.easybuy.model.vo.PageVO;
+import com.mizore.easybuy.service.base.ITbItemImageService;
+import com.mizore.easybuy.service.base.ITbItemService;
 import com.mizore.easybuy.service.base.ITbItemImageService;
 import com.mizore.easybuy.service.base.ITbItemService;
 import com.mizore.easybuy.service.base.ItemService;
@@ -124,5 +132,54 @@ public class ItemServiceImpl implements ItemService {
         tbItemImageService.remove(queryWrapper);  // 执行删除操作
         // 返回删除成功信息
         return baseVO.success();
+    }
+
+    // 商家根据条件查询商品信息，没有传的条件不做过滤
+    @Override
+    public BasePageVO<List<ItemInfo4SellerVO>> sellerGetItems(Integer categoryId, List<Integer> statuses, String keyword, Integer pageSize, Integer pageNum) {
+        if (pageSize == null || pageNum == null) {
+            pageSize = 1;
+            pageNum = 10;
+        }
+
+        Page<Object> resPage = PageHelper.startPage(1, 10);
+        // 获得当前用户
+        UserDTO userDTO = UserHolder.get();
+        // 获得卖家id
+        int sellerId = userDTO.getId();
+
+        // 查询符合条件的商品信息
+        List<TbItem> tbItems = tbItemService.conditionalGetItems(categoryId, statuses, keyword, sellerId);
+
+        // convert to VO
+        List<ItemInfo4SellerVO> res = Lists.newArrayList();
+        for(TbItem item: tbItems) {
+            // 获得商品id
+            Integer itemId = item.getId();
+            // 获得商品的第一张描述图（id最小的）
+            String imgUrl = tbItemImageService.getFirstImgUrl(itemId);
+            ItemInfo4SellerVO itemInfo = ItemInfo4SellerVO.builder()
+                    .itemId(itemId)
+                    .imgUrl(imgUrl)
+                    .title(item.getTitle())
+                    .description(item.getDescription())
+                    .price(item.getPrice())
+                    .stock(item.getStock())
+
+                    .status(item.getStatus())
+                    .statusDesc(ItemStatusEnum.getDescByCode(item.getStatus()))
+
+                    .ctime(item.getCtime())
+                    .build();
+            res.add(itemInfo);
+        }
+
+        BasePageVO<List<ItemInfo4SellerVO>> basePageVO = new BasePageVO<List<ItemInfo4SellerVO>>().success();
+        basePageVO.setData(res);
+        PageVO pageVO = new PageVO(pageSize, pageNum);
+        pageVO.setPages(resPage.getPages());
+        pageVO.setTotal(resPage.getTotal());
+        basePageVO.setPage(pageVO);
+        return basePageVO;
     }
 }
