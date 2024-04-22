@@ -1,5 +1,6 @@
 package com.mizore.easybuy.service.base.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.mizore.easybuy.model.entity.TbOrder;
 import com.mizore.easybuy.mapper.TbOrderMapper;
@@ -33,10 +34,34 @@ public class TbOrderServiceImpl extends ServiceImpl<TbOrderMapper, TbOrder> impl
             query.eq(TbOrder::getUserId, userId);
         }
 
-        if (status != null) {
+        if (CollectionUtil.isNotEmpty(status)) {
             query.in(TbOrder::getStatus, status);
         }
+        // 修改时间倒序
+        query.orderByDesc(TbOrder::getMtime);
+        return list(query);
+    }
 
+    @Override
+    public List<TbOrder> buyerSearch(Integer orderId, Integer sellerId, List<Integer> status, int userId) {
+        // 查询当前用户的订单
+        LambdaQueryWrapper<TbOrder> query = new LambdaQueryWrapper<TbOrder>()
+                .eq(TbOrder::getUserId, userId);
+        // 可选择按订单号查询
+        if (orderId != null) {
+            query.eq(TbOrder::getId, orderId);
+        }
+        // 可选择按店铺（卖家）查询
+        if (sellerId != null) {
+            query.eq(TbOrder::getUserId, sellerId);
+        }
+        // 可选择按订单状态查询
+        if (CollectionUtil.isNotEmpty(status)) {
+            query.in(TbOrder::getStatus, status);
+        }
+        // 修改时间倒序
+        query.orderByDesc(TbOrder::getMtime);
+        // 返回满足条件的订单列表
         return list(query);
     }
 }

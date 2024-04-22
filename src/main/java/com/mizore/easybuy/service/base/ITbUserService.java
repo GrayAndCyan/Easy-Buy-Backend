@@ -15,8 +15,8 @@ import com.mizore.easybuy.model.vo.BaseVO;
  * @since 2024-04-06
  */
 public interface ITbUserService extends IService<TbUser> {
-    
-    
+    TbUser getByUser(int userId);
+
     Result_login loginService(String uname, String password);
 
     Result_register registerService(String uname, String password);
