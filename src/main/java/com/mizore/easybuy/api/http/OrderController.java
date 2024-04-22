@@ -1,6 +1,7 @@
 package com.mizore.easybuy.api.http;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.aliyuncs.http.HttpRequest;
 import com.google.common.collect.Lists;
 import com.mizore.easybuy.model.entity.TbOrderDetail;
 import com.mizore.easybuy.model.enums.OrderStatusEnum;
@@ -74,7 +75,7 @@ public class OrderController {
      * @return
      * @throws RuntimeException
      */
-    @PostMapping
+    @PostMapping("/order")
     public BaseVO<Object> placeOrder(
             @RequestBody List<TbOrderDetail> orderedItems,
             @RequestParam(value = "addrDesc") String addrDesc,
@@ -82,6 +83,8 @@ public class OrderController {
             @RequestParam(value = "addrPhone") String addrPhone,
             @RequestParam(value = "sellerId") Integer sellerId
             ) {
+        log.info("用户下单接口");
+        log.info("orderedItems:{},addrDesc:{},addrUsername:{},sellerId:{}",orderedItems,addrDesc,addrUsername,addrPhone,sellerId);
         return orderService.placeOrder(orderedItems, addrDesc, addrUsername, addrPhone, sellerId);
     }
 
