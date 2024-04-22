@@ -21,16 +21,10 @@ import java.util.UUID;
 @Component
 public class AliOSSUtils {
 
-//    private String endpoint = "https://oss-cn-beijing.aliyuncs.com";
-//    private String accessKeyId = "LTAI5tLqCHuGgbHCXhk8RSGk";
-//    private String accessKeySecret = "2Mqw8Im9yjEKEzuejqSSCFr5Z6PPtx";
-//    private String bucketName = "starskylk";
-
-    private String endpoint ;
-    private String accessKeyId ;
-    private String accessKeySecret ;
-    private String bucketName ;
-
+    private String endpoint = "https://oss-cn-beijing.aliyuncs.com";
+    private String accessKeyId = "LTAI5tLqCHuGgbHCXhk8RSGk";
+    private String accessKeySecret = "2Mqw8Im9yjEKEzuejqSSCFr5Z6PPtx";
+    private String bucketName = "starskylk";
 
     /**
      * 文件上传
