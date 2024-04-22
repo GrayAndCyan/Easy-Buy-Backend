@@ -11,6 +11,7 @@ import com.mizore.easybuy.model.dto.UserDTO;
 import com.mizore.easybuy.model.entity.TbUser;
 import com.mizore.easybuy.model.enums.RoleEnum;
 import com.mizore.easybuy.model.vo.BaseVO;
+import com.mizore.easybuy.model.vo.loginUserVO;
 import com.mizore.easybuy.service.base.ITbUserService;
 import com.mizore.easybuy.utils.JWTUtil;
 import com.mizore.easybuy.utils.UserHolder;
@@ -31,8 +32,9 @@ public class UserService {
     private ITbUserService tbUserService;
 
 
-    public BaseVO<String> login(String username, String password, HttpServletResponse response) {
-        BaseVO<String> baseVO = new BaseVO<>();
+    public BaseVO<loginUserVO> login(String username, String password, HttpServletResponse response) {
+        BaseVO<loginUserVO> baseVO = new BaseVO<>();
+
         if (StrUtil.isBlank(username) || StrUtil.isBlank(password)) {
             log.warn("登陆参数异常， username:{}, password:{} ", username, password);
             return baseVO.failure();
@@ -45,18 +47,25 @@ public class UserService {
 
         if (CollectionUtil.isEmpty(res) || res.size() != 1) {
             log.info("username: {},password: {}, list size: {}", username, password, res.size());
-            return baseVO.failure().setData("登陆失败，用户不存在。");
+//            return baseVO.failure().setData("登陆失败，用户不存在。");
+
         }
 
         // 登陆成功，生成token并返回
         TbUser user = res.get(0);
+        loginUserVO loginuser = new loginUserVO();
+
         Map<String, Object> newClaims = Maps.newHashMap();
         newClaims.put("id", user.getId());
         newClaims.put("username", user.getUsername());
         newClaims.put("role", user.getRole());
         String token = JWTUtil.generateJWT(newClaims);
+        loginuser.setToken(token);
+        loginuser.setRole(user.getRole());
+
         response.setHeader("token", token);  // 在响应头返回token
-        return baseVO.setData(token);  // 响应体的data再存一遍token ，前端可以从响应体/响应头 两个地方拿到token
+        log.info("登陆成功返回的数据：role:{}",user.getRole());
+        return baseVO.setData(loginuser);  // 响应体的data再存一遍token ，前端可以从响应体/响应头 两个地方拿到token
     }
 
     public BaseVO<Object> register(String username, String password) {

@@ -3,9 +3,11 @@ package com.mizore.easybuy.api.http;
 import com.mizore.easybuy.model.enums.Result_login;
 import com.mizore.easybuy.model.enums.Result_register;
 import com.mizore.easybuy.model.vo.BaseVO;
+import com.mizore.easybuy.model.vo.loginUserVO;
 import com.mizore.easybuy.service.base.ITbUserService;
 import com.mizore.easybuy.service.business.UserService;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author mizore
  * @since 2024-04-06
  */
+@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -46,10 +49,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public BaseVO<String> login(
+    public BaseVO<loginUserVO> login(
             @RequestParam("username") String username,
             @RequestParam("password") String password,
             HttpServletResponse response){
+        log.info("登录:username:{},password:{}",username,password);
         return userService.login(username, password, response);
     }
 

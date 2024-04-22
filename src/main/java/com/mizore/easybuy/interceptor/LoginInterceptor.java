@@ -33,6 +33,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader(TOKEN);
+        log.info("token的值：{}",token);
         if (StrUtil.isBlank(token)) {
             // 无token,认证失败
             log.info("token为空，认证失败。request: {}", request);
