@@ -26,8 +26,14 @@ public interface ItemMapper {
     ItemAndImage getById(Long id);
 
     /**
-     * 根据商品id修改商品status
+     * 根据商品id上架商品
      * @param itemAndImage
      */
-    void UpdateItemStatus(ItemAndImage itemAndImage);
+    void onshelf(ItemAndImage itemAndImage);
+
+    /**
+     * 根据商品id下架商品
+     * @param itemAndImage
+     */
+    void offshelf(ItemAndImage itemAndImage);
 }

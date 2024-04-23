@@ -59,6 +59,7 @@ public class OrderController {
     // 卖家发货
     @PostMapping("/seller/send/{orderId}")
     public BaseVO<Object> sendOrder(@PathVariable(value = "orderId") Integer orderId) {
+        log.info("订单id:{}",orderId);
         orderService.sendOrder(orderId);
         return new BaseVO<>().success();
     }
@@ -74,7 +75,7 @@ public class OrderController {
      * @return
      * @throws RuntimeException
      */
-    @PostMapping
+    @PostMapping("/order")
     public BaseVO<Object> placeOrder(
             @RequestBody List<TbOrderDetail> orderedItems,
             @RequestParam(value = "addrDesc") String addrDesc,

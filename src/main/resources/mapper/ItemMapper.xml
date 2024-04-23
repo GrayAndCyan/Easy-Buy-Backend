@@ -16,7 +16,16 @@
         order by a.ctime desc
     </select>
 
-    <update id="UpdateItemStatus">
+    <update id="onshelf">
+        update tb_item
+        <set>
+            status = #{status},
+            mtime = #{mtime}
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="offshelf">
         update tb_item
         <set>
             status = #{status},

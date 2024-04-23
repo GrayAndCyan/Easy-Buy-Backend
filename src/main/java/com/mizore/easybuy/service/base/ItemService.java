@@ -14,10 +14,15 @@ public interface ItemService {
 
     /**
      * 根据商品id修改商品status
-     * @param status
      * @param id
      */
-    void UpdateItemStatus(Integer status, Integer id);
+    void onshelf(Integer id);
+
+    /**
+     * 根据商品id下架商品
+     * @param id
+     */
+    void offshelf(Integer id);
 
     /**
      * 商品分页查询

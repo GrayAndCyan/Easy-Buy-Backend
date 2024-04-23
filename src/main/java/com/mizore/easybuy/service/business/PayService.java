@@ -113,6 +113,7 @@ public class PayService {
             log.error("order status error, should be PENDING_PAYMENT. but find status: {}", order.getStatus());
             return;
         }
+        log.info("订单状态值：OrderStatusEnum.PROCESSING.getCode():{}",OrderStatusEnum.PROCESSING.getCode());
         order.setStatus(OrderStatusEnum.PROCESSING.getCode());
         tbOrderService.updateById(order);
 

@@ -2,9 +2,9 @@ package com.mizore.easybuy.model.enums;
 
 public enum ItemStatusEnum {
 
-    ON_SALE(1,"上架"),
+    ON_SALE(1,"On sale"),
 
-    OUT_SALE(2, "下架");
+    OUT_SALE(2, "Off sale");
 
     private Integer code;
 

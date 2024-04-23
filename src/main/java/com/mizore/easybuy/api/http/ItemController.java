@@ -55,20 +55,20 @@ public class ItemController {
     }
 
     /**
-     * 上架商品
+     * 新增商品
      * @param tbItem 商品基本信息
      * @param images 商品图片信息
      */
     @PostMapping
     public BaseVO<Object> addItem(
             @RequestBody TbItem tbItem,
-            @RequestParam List<String> images
+            @RequestParam(required = false) List<String> images
     ) {
         return itemService.addItem(tbItem, images);
     }
 
     /**
-     * 根据商品id，下架指定商品
+     * 根据商品id，删除指定商品
      * @param id 商品id
      * @throws RuntimeException
      */
@@ -77,10 +77,27 @@ public class ItemController {
         return itemService.deleteItem(id);
     }
 
-    @PostMapping("/status/{status}")
-    public BaseVO UpdateItemStatus(@PathVariable Integer status,Integer id){
-        log.info("根据商品id修改商品上下架状态，status值为：{},id值为：{}，",status,id);
-        itemService.UpdateItemStatus(status,id);
+    /**
+     * 上架商品
+     * @param id
+     * @return
+     */
+    @PostMapping("/status/onshelf/{id}")
+    public BaseVO onshelf(@PathVariable Integer id){
+        log.info("根据商品id完成商品上架功能，id值为：{}，",id);
+        itemService.onshelf(id);
+        return new BaseVO().success();
+    }
+
+    /**
+     * 下架商品
+     * @param id
+     * @return
+     */
+    @PostMapping("/status/offshelf/{id}")
+    public BaseVO offshelf(@PathVariable Integer id){
+        log.info("根据商品id下架商品功能，id值为：{}，",id);
+        itemService.offshelf(id);
         return new BaseVO().success();
     }
 

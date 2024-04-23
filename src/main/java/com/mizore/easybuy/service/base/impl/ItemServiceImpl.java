@@ -47,17 +47,29 @@ public class ItemServiceImpl implements ItemService {
     private ITbItemImageService tbItemImageService;
 
     /**
-     * 根据商品id修改商品status
-     * @param status
+     * 根据商品id上架商品
      * @param id
      */
     @Override
-    public void UpdateItemStatus(Integer status, Integer id) {
+    public void onshelf(Integer id) {
         ItemAndImage itemAndImage = new ItemAndImage();
         itemAndImage.setId(id);
-        itemAndImage.setStatus(status);
+        itemAndImage.setStatus(1);
         itemAndImage.setMtime(LocalDateTime.now());
-        itemMapper.UpdateItemStatus(itemAndImage);
+        itemMapper.onshelf(itemAndImage);
+    }
+
+    /**
+     * 根据商品id下架商品
+     * @param id
+     */
+    @Override
+    public void offshelf(Integer id) {
+        ItemAndImage itemAndImage = new ItemAndImage();
+        itemAndImage.setId(id);
+        itemAndImage.setStatus(2);
+        itemAndImage.setMtime(LocalDateTime.now());
+        itemMapper.offshelf(itemAndImage);
     }
 
     /**
@@ -99,7 +111,7 @@ public class ItemServiceImpl implements ItemService {
         // 设置上架商品对应的卖家id
         tbItem.setSellerId(user.getId());
         // 将商品状态设置为“下架”
-        tbItem.setStatus(ItemStatusEnum.OUT_SALE.getCode());
+        tbItem.setStatus(ItemStatusEnum.ON_SALE.getCode());
         // 将新增商品插入商品表
         tbItemService.save(tbItem);
         // 获得新增商品id
