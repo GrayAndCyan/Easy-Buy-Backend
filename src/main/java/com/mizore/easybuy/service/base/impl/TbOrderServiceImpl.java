@@ -53,7 +53,7 @@ public class TbOrderServiceImpl extends ServiceImpl<TbOrderMapper, TbOrder> impl
         }
         // 可选择按店铺（卖家）查询
         if (sellerId != null) {
-            query.eq(TbOrder::getUserId, sellerId);
+            query.eq(TbOrder::getSellerId, sellerId);
         }
         // 可选择按订单状态查询
         if (CollectionUtil.isNotEmpty(status)) {

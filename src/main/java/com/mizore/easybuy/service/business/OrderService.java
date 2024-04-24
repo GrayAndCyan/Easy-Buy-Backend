@@ -297,15 +297,8 @@ public class OrderService {
         Page<Object> resPage = PageHelper.startPage(1, 10);
 
         UserDTO userDTO = UserHolder.get();
-        // 查对应买家用户
-        int userId = -1;
-        if (userDTO != null) {
-            int id = userDTO.getId();
-            TbUser user = tbUserService.getByUser(id);
-            if (user != null) {
-                userId = user.getId();
-            }
-        }
+        // 获取当前用户id
+        Integer userId = userDTO.getId();
 
         List<TbOrder> tbOrders = tbOrderService.buyerSearch(orderId, sellerId, statuses, userId);
 
@@ -320,7 +313,7 @@ public class OrderService {
         } else {
             List<TbSeller> tbSellers = tbSellerService.searchBySellerIds(sellerIds);
             sellerMap = tbSellers.stream()
-                    .collect(Collectors.toMap(TbSeller::getUserId, TbSeller::getName));
+                    .collect(Collectors.toMap(TbSeller::getId, TbSeller::getName));
         }
 
         // addrId -> addr
