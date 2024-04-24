@@ -58,7 +58,7 @@ public class TbItem implements Serializable {
     private Integer stock;
 
     /**
-     * 商品上下架状态
+     * 商品上下架状态，1：上架，2：下架
      */
     private Integer status;
 
