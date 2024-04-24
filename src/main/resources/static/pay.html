@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test pay</title>
+</head>
+<body>
+<form name="punchout_form" method="post"
+      action="https://openapi-sandbox.dl.alipaydev.com/gateway.do?charset=UTF-8&method=alipay.trade.page.pay&sign=VSn80djxtEyHAr78z8fD6q3b%2BXJvQlyvDFfbO26wt9tTJFf0DE%2FiyTvEw1zfnD9BxpXk8KWHDjlR8P9Dlfz82%2BtA%2B%2Bk%2B7pUNgvsaRXM2jVrVUwC0Zc9jPU1w%2FI97PxYnNsdOX08matRcW%2Bb7ryoDafEjMLEazt5ant4S0oU6Y8EgAdjadPySFcKUqrX%2FHK3YWVC9bwr4fdokOow%2Bjc6gUgcn0S1MVeCZvg6T6dIxqd2gNFo%2FlvSAKwuIqwDhlLosev6IX9TLS14WQwiG77HlyY9I8tHGO337SSpO9QEUu7qIAWdV%2B3hPzy3nEHwbu8R4KIdsqtvIKruGvCQ7BUZsEw%3D%3D&notify_url=http%3A%2F%2Fanjs8s.natappfree.cc%2Fpay%2Fcallback&version=1.0&app_id=9021000136610564&sign_type=RSA2&timestamp=2024-04-12+00%3A13%3A47&alipay_sdk=alipay-sdk-java-dynamicVersionNo&format=JSON">
+    <input type="hidden" name="biz_content" value="{&quot;subject&quot;:&quot;订单3&quot;,&quot;product_code&quot;:&quot;FAST_INSTANT_TRADE_PAY&quot;,&quot;out_trade_no&quot;:&quot;999&quot;,&quot;total_amount&quot;:18}">
+    <input type="submit" value="立即支付" style="display:none" >
+</form>
+<script>
+    document.forms[0].submit();
+</script>
+</body>
+</html>
