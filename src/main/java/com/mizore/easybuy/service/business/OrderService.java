@@ -298,7 +298,7 @@ public class OrderService {
 
         UserDTO userDTO = UserHolder.get();
         // 获取当前用户id
-        Integer userId = userDTO.getId();
+        int userId = userDTO.getId();
 
         List<TbOrder> tbOrders = tbOrderService.buyerSearch(orderId, sellerId, statuses, userId);
 
