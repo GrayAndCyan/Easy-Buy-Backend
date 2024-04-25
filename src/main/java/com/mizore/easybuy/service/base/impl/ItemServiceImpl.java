@@ -167,8 +167,15 @@ public class ItemServiceImpl implements ItemService {
         Page<Object> resPage = PageHelper.startPage(1, 10);
         // 获得当前用户
         UserDTO userDTO = UserHolder.get();
-        // 获得卖家id
-        int sellerId = userDTO.getId();
+        // 根据seller的用户id，查他的对应店铺
+        int sellerId = -1;
+        if (userDTO != null) {
+            int id = userDTO.getId();
+            TbSeller seller = tbSellerService.getByOwner(id);
+            if (seller != null) {
+                sellerId = seller.getId();
+            }
+        }
 
         // 查询符合条件的商品信息
         List<TbItem> tbItems = tbItemService.conditionalGetItems(categoryId, statuses, keyword, sellerId);
