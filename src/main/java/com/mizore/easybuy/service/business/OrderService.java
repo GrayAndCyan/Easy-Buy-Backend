@@ -410,10 +410,18 @@ public class OrderService {
         return basePageVO;
     }
 
-    public void sendOrder(Integer orderId) {
+    /*public void sendOrder(Integer orderId, String delinum) {
         TbOrder order = tbOrderService.getById(orderId);
         if (order != null && Objects.equals(order.getStatus(), OrderStatusEnum.PROCESSING.getCode())) {
             order.setStatus(OrderStatusEnum.SHIPPED.getCode());
+            tbOrderService.updateById(order);
+        }
+    }*/
+    public void sendOrder(Integer orderId, String delinum) {
+        TbOrder order = tbOrderService.getById(orderId);
+        if (order != null && Objects.equals(order.getStatus(), OrderStatusEnum.PROCESSING.getCode())) {
+            order.setStatus(OrderStatusEnum.SHIPPED.getCode());
+            order.setDeliveryNumber(delinum); // 将 delinum 设置到订单实体类中的 deliveryNumber 字段
             tbOrderService.updateById(order);
         }
     }

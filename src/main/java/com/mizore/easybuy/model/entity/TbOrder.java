@@ -49,6 +49,8 @@ public class TbOrder implements Serializable {
 
     private Integer sellerId;
 
+    private String delinum;
+
     public Integer getSellerId() {
         return sellerId;
     }
@@ -97,6 +99,10 @@ public class TbOrder implements Serializable {
         this.status = status;
     }
 
+    public void setDeliveryNumber(String delinum){this.delinum=delinum;}
+
+    public String getDeliveryNumber(){return delinum;}
+
     public Integer getAddressId() {
         return addressId;
     }
@@ -143,6 +149,7 @@ public class TbOrder implements Serializable {
                 "id=" + id +
                 ", userId=" + userId +
                 ", status=" + status +
+                ", delinum+" + delinum +
                 ", addressId=" + addressId +
                 ", totalAmount=" + totalAmount +
                 ", sellerId=" + sellerId +

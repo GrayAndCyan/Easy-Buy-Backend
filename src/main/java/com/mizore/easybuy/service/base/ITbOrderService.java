@@ -1,5 +1,6 @@
 package com.mizore.easybuy.service.base;
 
+import com.mizore.easybuy.model.entity.TbAddress;
 import com.mizore.easybuy.model.entity.TbOrder;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -20,4 +21,7 @@ public interface ITbOrderService extends IService<TbOrder> {
     List<TbOrder> buyerSearch(Integer orderId, Integer sellerId, List<Integer> status, int userId);
 
     List<TbOrder> searchforuser(Integer orderId, Integer userId, List<Integer> status);
+
+
+
 }

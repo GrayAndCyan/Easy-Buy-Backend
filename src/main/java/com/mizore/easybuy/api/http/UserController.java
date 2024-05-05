@@ -58,4 +58,14 @@ public class UserController {
     public BaseVO<Object> register(@RequestParam("username") String username, @RequestParam("password") String password) {
         return userService.register(username, password);
     }
+    @PostMapping("addAdd")
+    public BaseVO addAdd(
+            @RequestParam(value = "adddes") String adddes,
+            @RequestParam(value = "addname") String addname,
+            @RequestParam(value = "addphone") String addphone
+    ){
+        return tbUserService.addAdd(adddes,addname,addphone);
+    }
+
+
 }

@@ -21,4 +21,5 @@ public interface ITbUserService extends IService<TbUser> {
     TbUser getByUser(int userId);
 
     BaseVO openStore(String name, String address);
+    BaseVO addAdd(String adddes,String addname,String addphone);
 }
