@@ -3,6 +3,8 @@ package com.mizore.easybuy.service.base;
 import com.mizore.easybuy.model.entity.TbAddress;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 地址表 服务类
@@ -22,4 +24,7 @@ public interface ITbAddressService extends IService<TbAddress> {
     TbAddress queryAddress(Integer id);
 
     int findOrInsertAddr(Integer userid, String address, String username, String phone);
+
+
+    List<TbAddress> searchadd(Integer userId);
 }

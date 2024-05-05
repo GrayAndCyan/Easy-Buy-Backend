@@ -7,6 +7,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.mizore.easybuy.mapper.TbAddressMapper;
 import com.mizore.easybuy.mapper.TbSellerMapper;
 import com.mizore.easybuy.model.dto.UserDTO;
 import com.mizore.easybuy.model.entity.*;
@@ -72,5 +73,21 @@ public class TbUserServiceImpl extends ServiceImpl<TbUserMapper, TbUser> impleme
             baseVO.setMessage("Open store failed, role error!");
             return baseVO;
         }
+    }
+
+    @Autowired
+    private TbAddressMapper tbAddressMapper;
+    @Transactional
+    public BaseVO addAdd(String adddes,String addname,String addphone){
+        BaseVO<String> baseVO = new BaseVO<>();
+        TbAddress tbAddress = new TbAddress();
+        UserDTO userDTO = UserHolder.get();
+
+        tbAddress.setUserId(userDTO.getId());
+        tbAddress.setAddrDesc(adddes);
+        tbAddress.setAddrUsername(addname);
+        tbAddress.setAddrPhone(addphone);
+        tbAddressMapper.insert(tbAddress);
+        return baseVO.success();
     }
 }

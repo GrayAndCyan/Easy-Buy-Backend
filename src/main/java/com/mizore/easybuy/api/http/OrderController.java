@@ -52,7 +52,7 @@ public class OrderController {
         return orderService.search(orderId, userId, statuses, pageSize, pageNum);
     }
 
-    @GetMapping("/order/user/search")
+    @GetMapping("user/search")
     public BasePageVO<List<OrderInfo4UserVO>> searchuserOrder(
             @RequestParam(value = "orderId", required = false) Integer orderId,
             @RequestParam(value = "userId") Integer userId,
@@ -66,11 +66,19 @@ public class OrderController {
 
 
     // 卖家发货
-    @PostMapping("/seller/send/{orderId}")
+    /*@PostMapping("/seller/send/{orderId}")
     public BaseVO<Object> sendOrder(@PathVariable(value = "orderId") Integer orderId) {
         orderService.sendOrder(orderId);
         return new BaseVO<>().success();
+    }*/
+
+    @PostMapping("/seller/send/{orderId}")
+    public BaseVO<Object> sendOrder(@PathVariable(value = "orderId") Integer orderId,
+                                    @RequestParam(value = "delinum") String delinum) {
+        orderService.sendOrder(orderId, delinum);
+        return new BaseVO<>().success();
     }
+
 
 
     /**

@@ -2,6 +2,7 @@ package com.mizore.easybuy.api.http;
 
 import com.mizore.easybuy.model.vo.BaseVO;
 import com.mizore.easybuy.service.base.ITbUserService;
+import com.mizore.easybuy.service.base.ITbAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,5 +38,15 @@ public class UserController {
     ){
         return tbUserService.openStore(name, address);
     }
+
+    @PostMapping("addAdd")
+    public BaseVO addAdd(
+            @RequestParam(value = "adddes") String adddes,
+            @RequestParam(value = "addname") String addname,
+            @RequestParam(value = "addphone") String addphone
+    ){
+        return tbUserService.addAdd(adddes,addname,addphone);
+    }
+
 
 }

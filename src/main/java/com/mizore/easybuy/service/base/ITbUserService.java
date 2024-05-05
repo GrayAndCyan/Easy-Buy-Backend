@@ -19,4 +19,5 @@ import java.util.List;
  */
 public interface ITbUserService extends IService<TbUser> {
     BaseVO openStore(String name, String address);
+    BaseVO addAdd(String adddes,String addname,String addphone);
 }
