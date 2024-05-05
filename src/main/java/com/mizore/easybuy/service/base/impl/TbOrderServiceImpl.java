@@ -2,6 +2,7 @@ package com.mizore.easybuy.service.base.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.mizore.easybuy.model.entity.TbAddress;
 import com.mizore.easybuy.model.entity.TbOrder;
 import com.mizore.easybuy.mapper.TbOrderMapper;
 import com.mizore.easybuy.service.base.ITbOrderService;
@@ -64,4 +65,25 @@ public class TbOrderServiceImpl extends ServiceImpl<TbOrderMapper, TbOrder> impl
         // 返回满足条件的订单列表
         return list(query);
     }
+
+    @Override
+    public List<TbOrder> searchforuser(Integer orderId, Integer userId, List<Integer> status) {
+        LambdaQueryWrapper<TbOrder> query = new LambdaQueryWrapper<TbOrder>()
+                .eq(TbOrder::getUserId, userId);
+
+        if (orderId != null) {
+            query.eq(TbOrder::getId, orderId);
+        }
+
+        if (status != null) {
+            query.in(TbOrder::getStatus, status);
+        }
+
+        return list(query);
+    }
+
+
+
+
+
 }

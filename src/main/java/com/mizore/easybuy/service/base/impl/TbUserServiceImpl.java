@@ -1,17 +1,23 @@
 package com.mizore.easybuy.service.base.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.mizore.easybuy.mapper.TbAddressMapper;
 import com.mizore.easybuy.mapper.TbSellerMapper;
 import com.mizore.easybuy.mapper.TbUserMapper;
 import com.mizore.easybuy.model.dto.UserDTO;
-import com.mizore.easybuy.model.entity.TbSeller;
-import com.mizore.easybuy.model.entity.TbUser;
+import com.mizore.easybuy.model.entity.*;
+import com.mizore.easybuy.model.enums.OrderStatusEnum;
 import com.mizore.easybuy.model.enums.ReturnEnum;
 import com.mizore.easybuy.model.enums.RoleEnum;
-import com.mizore.easybuy.model.vo.BaseVO;
-import com.mizore.easybuy.service.base.ITbUserService;
+import com.mizore.easybuy.model.vo.*;
+import com.mizore.easybuy.service.base.*;
 import com.mizore.easybuy.utils.UserHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -80,4 +89,19 @@ public class TbUserServiceImpl extends ServiceImpl<TbUserMapper, TbUser> impleme
         }
     }
 
+    @Autowired
+    private TbAddressMapper tbAddressMapper;
+    @Transactional
+    public BaseVO addAdd(String adddes,String addname,String addphone){
+        BaseVO<String> baseVO = new BaseVO<>();
+        TbAddress tbAddress = new TbAddress();
+        UserDTO userDTO = UserHolder.get();
+
+        tbAddress.setUserId(userDTO.getId());
+        tbAddress.setAddrDesc(adddes);
+        tbAddress.setAddrUsername(addname);
+        tbAddress.setAddrPhone(addphone);
+        tbAddressMapper.insert(tbAddress);
+        return baseVO.success();
+    }
 }
