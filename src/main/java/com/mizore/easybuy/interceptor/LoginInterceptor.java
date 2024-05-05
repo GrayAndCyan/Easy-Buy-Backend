@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.Map;
 
 @Slf4j
-@Order(value = AppConstant.HALF_MAX)
+@Order(value = Integer.MAX_VALUE >> 1)
 public class LoginInterceptor implements HandlerInterceptor {
 
     private final static String TOKEN = "token";

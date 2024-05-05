@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mizore.easybuy.mapper.TbBanMapper">
+
+    <resultMap id="BaseResultMap" type="com.mizore.easybuy.model.entity.TbBan">
+            <id property="id" column="id" jdbcType="OTHER"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="reason" column="reason" jdbcType="VARCHAR"/>
+            <result property="deleted" column="deleted" jdbcType="TINYINT"/>
+            <result property="start" column="start" jdbcType="TIMESTAMP"/>
+            <result property="end" column="end" jdbcType="TIMESTAMP"/>
+            <result property="mtime" column="mtime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_id,reason,
+        deleted,start,end,
+        mtime
+    </sql>
+</mapper>

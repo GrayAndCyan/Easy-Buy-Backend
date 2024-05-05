@@ -1,5 +1,7 @@
 package com.mizore.easybuy.utils;
 
+import java.util.List;
+
 public class BloomFilter<T> {
 
     private final int bitSize;
@@ -45,4 +47,9 @@ public class BloomFilter<T> {
         //使用位掩码将指定位设置为 1
         bitmap[byteIndex] |= (1 << bitOffset);
     }
+
+    public void setBatch(List<T> batchObj) {
+        batchObj.forEach(this::set);
+    }
 }
+

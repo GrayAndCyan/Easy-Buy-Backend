@@ -1,5 +1,6 @@
 package com.mizore.easybuy.service.base;
 
+import com.mizore.easybuy.model.entity.TbBan;
 import com.mizore.easybuy.model.entity.TbUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mizore.easybuy.model.vo.BasePageVO;
@@ -22,4 +23,6 @@ public interface ITbUserService extends IService<TbUser> {
 
     BaseVO openStore(String name, String address);
     BaseVO addAdd(String adddes,String addname,String addphone);
+
+    TbUser getUserByLoginInfo(String username, String password);
 }
