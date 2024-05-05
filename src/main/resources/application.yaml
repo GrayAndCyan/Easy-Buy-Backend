@@ -34,3 +34,8 @@ mybatis-plus:
 logging:
   level:
     com.baomidou.mybatisplus.core: debug
+
+# 封禁功能布隆过滤器相关配置
+ban:
+  # 布隆过滤器大小，单位bit
+  bloomFilterSize: 1024
