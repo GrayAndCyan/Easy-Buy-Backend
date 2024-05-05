@@ -104,4 +104,12 @@ public class TbUserServiceImpl extends ServiceImpl<TbUserMapper, TbUser> impleme
         tbAddressMapper.insert(tbAddress);
         return baseVO.success();
     }
+
+    @Override
+    public TbUser getUserByLoginInfo(String username, String password) {
+        LambdaQueryWrapper<TbUser> query = new LambdaQueryWrapper<TbUser>()
+                .eq(TbUser::getUsername, username)
+                .eq(TbUser::getPassword, password);
+        return list(query).get(0);
+    }
 }
