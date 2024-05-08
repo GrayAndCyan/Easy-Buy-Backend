@@ -7,23 +7,19 @@ import com.google.common.collect.Lists;
 import com.mizore.easybuy.mapper.ItemMapper;
 import com.mizore.easybuy.model.dto.ItemPageQueryDTO;
 import com.mizore.easybuy.model.dto.UserDTO;
-import com.mizore.easybuy.model.entity.ItemAndImage;
-import com.mizore.easybuy.model.entity.TbItem;
+import com.mizore.easybuy.model.entity.*;
 import com.mizore.easybuy.model.enums.ItemStatusEnum;
 import com.mizore.easybuy.model.vo.BasePageVO;
 import com.mizore.easybuy.model.vo.ItemInfo4SellerVO;
 import com.mizore.easybuy.model.entity.TbItem;
-import com.mizore.easybuy.model.entity.TbItemImage;
 import com.mizore.easybuy.model.enums.ReturnEnum;
 import com.mizore.easybuy.model.enums.RoleEnum;
 import com.mizore.easybuy.model.vo.BaseVO;
 import com.mizore.easybuy.model.vo.PageResult;
 import com.mizore.easybuy.model.vo.PageVO;
+import com.mizore.easybuy.service.base.*;
 import com.mizore.easybuy.service.base.ITbItemImageService;
 import com.mizore.easybuy.service.base.ITbItemService;
-import com.mizore.easybuy.service.base.ITbItemImageService;
-import com.mizore.easybuy.service.base.ITbItemService;
-import com.mizore.easybuy.service.base.ItemService;
 import com.mizore.easybuy.utils.UserHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +41,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Autowired
     private ITbItemImageService tbItemImageService;
+
+    @Autowired
+    private ITbSellerService tbSellerService;
 
     /**
      * 根据商品id上架商品
@@ -96,7 +95,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     /**
-     * 上架商品
+     * 新增商品
      */
     public BaseVO<Object> addItem(TbItem tbItem, List<String> images) {
         BaseVO<Object> baseVO = new BaseVO<>();
@@ -108,10 +107,19 @@ public class ItemServiceImpl implements ItemService {
                     .setCode(ReturnEnum.FAILURE.getCode());
             return baseVO;
         }
+        // 查对应店铺
+        int sellerId = -1;
+        if (user != null) {
+            int id = user.getId();
+            TbSeller seller = tbSellerService.getByOwner(id);
+            if (seller != null) {
+                sellerId = seller.getId();
+            }
+        }
         // 设置上架商品对应的卖家id
-        tbItem.setSellerId(user.getId());
+        tbItem.setSellerId(sellerId);
         // 将商品状态设置为“下架”
-        tbItem.setStatus(ItemStatusEnum.ON_SALE.getCode());
+        tbItem.setStatus(ItemStatusEnum.OUT_SALE.getCode());
         // 将新增商品插入商品表
         tbItemService.save(tbItem);
         // 获得新增商品id
@@ -128,7 +136,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     /**
-     * 根据商品id，下架指定商品
+     * 根据商品id，删除指定商品
      */
     @Transactional
     public BaseVO<Object> deleteItem(Integer id) throws RuntimeException {
@@ -159,8 +167,15 @@ public class ItemServiceImpl implements ItemService {
         Page<Object> resPage = PageHelper.startPage(1, 10);
         // 获得当前用户
         UserDTO userDTO = UserHolder.get();
-        // 获得卖家id
-        int sellerId = userDTO.getId();
+        // 根据seller的用户id，查他的对应店铺
+        int sellerId = -1;
+        if (userDTO != null) {
+            int id = userDTO.getId();
+            TbSeller seller = tbSellerService.getByOwner(id);
+            if (seller != null) {
+                sellerId = seller.getId();
+            }
+        }
 
         // 查询符合条件的商品信息
         List<TbItem> tbItems = tbItemService.conditionalGetItems(categoryId, statuses, keyword, sellerId);

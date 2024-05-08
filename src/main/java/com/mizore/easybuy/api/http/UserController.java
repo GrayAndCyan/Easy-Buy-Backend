@@ -1,7 +1,5 @@
 package com.mizore.easybuy.api.http;
 
-import com.mizore.easybuy.model.enums.Result_login;
-import com.mizore.easybuy.model.enums.Result_register;
 import com.mizore.easybuy.model.vo.BaseVO;
 import com.mizore.easybuy.model.vo.loginUserVO;
 import com.mizore.easybuy.service.base.ITbUserService;
@@ -11,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -61,4 +58,14 @@ public class UserController {
     public BaseVO<Object> register(@RequestParam("username") String username, @RequestParam("password") String password) {
         return userService.register(username, password);
     }
+    @PostMapping("addAdd")
+    public BaseVO addAdd(
+            @RequestParam(value = "adddes") String adddes,
+            @RequestParam(value = "addname") String addname,
+            @RequestParam(value = "addphone") String addphone
+    ){
+        return tbUserService.addAdd(adddes,addname,addphone);
+    }
+
+
 }

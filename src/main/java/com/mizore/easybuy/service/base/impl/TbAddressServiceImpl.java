@@ -1,11 +1,14 @@
 package com.mizore.easybuy.service.base.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mizore.easybuy.model.entity.TbAddress;
 import com.mizore.easybuy.mapper.TbAddressMapper;
 import com.mizore.easybuy.service.base.ITbAddressService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -63,5 +66,12 @@ public class TbAddressServiceImpl extends ServiceImpl<TbAddressMapper, TbAddress
         newAddr.setAddrPhone(phone);
         save(newAddr);  // 向地址表中插入地址
         return newAddr.getId(); // 返回地址id
+    }
+
+    @Override
+    public List<TbAddress> searchadd(Integer userId){
+        LambdaQueryWrapper<TbAddress> query = new LambdaQueryWrapper<TbAddress>()
+                .eq(TbAddress::getUserId,userId);
+        return list(query);
     }
 }

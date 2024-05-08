@@ -7,6 +7,7 @@ import com.mizore.easybuy.model.dto.UserDTO;
 import com.mizore.easybuy.model.entity.TbUser;
 import com.mizore.easybuy.model.vo.BaseVO;
 import com.mizore.easybuy.service.base.ITbUserService;
+import com.mizore.easybuy.utils.AppConstant;
 import com.mizore.easybuy.utils.JWTUtil;
 import com.mizore.easybuy.utils.UserHolder;
 import io.jsonwebtoken.Claims;
@@ -14,12 +15,14 @@ import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.io.IOException;
 import java.util.Map;
 
 @Slf4j
+@Order(value = Integer.MAX_VALUE >> 1)
 public class LoginInterceptor implements HandlerInterceptor {
 
     private final static String TOKEN = "token";

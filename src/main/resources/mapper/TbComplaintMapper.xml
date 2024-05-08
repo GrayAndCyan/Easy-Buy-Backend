@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mizore.easybuy.mapper.TbComplaintMapper">
+
+    <resultMap id="BaseResultMap" type="com.mizore.easybuy.model.entity.TbComplaint">
+            <id property="id" column="id" jdbcType="OTHER"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="orderId" column="order_id" jdbcType="INTEGER"/>
+            <result property="reason" column="reason" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="deleted" column="deleted" jdbcType="TINYINT"/>
+            <result property="ctime" column="ctime" jdbcType="TIMESTAMP"/>
+            <result property="mtime" column="mtime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_id,order_id,
+        reason,status,deleted,
+        ctime,mtime
+    </sql>
+</mapper>

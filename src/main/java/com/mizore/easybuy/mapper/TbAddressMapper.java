@@ -2,6 +2,7 @@ package com.mizore.easybuy.mapper;
 
 import com.mizore.easybuy.model.entity.TbAddress;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author mizore
  * @since 2024-04-06
  */
+@Mapper
 public interface TbAddressMapper extends BaseMapper<TbAddress> {
 
 }
