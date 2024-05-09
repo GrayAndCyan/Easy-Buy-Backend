@@ -10,4 +10,7 @@ import com.mizore.easybuy.model.entity.TbCart;
 */
 public interface ITbCartService extends IService<TbCart> {
 
+    // 查询当前用户购物车中某件商品是否已经存在记录
+    TbCart itemExist(Integer userId, Integer itemId);
+
 }

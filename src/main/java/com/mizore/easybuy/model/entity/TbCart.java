@@ -1,8 +1,10 @@
 package com.mizore.easybuy.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -14,6 +16,8 @@ import java.time.LocalDateTime;
 @TableName(value ="tb_cart")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TbCart implements Serializable {
     /**
      * 自增主键ID

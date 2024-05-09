@@ -99,7 +99,7 @@ public class OrderService {
         return baseVO;
     }
 
-    private TbOrder doPlaceOrder(List<TbOrderDetail> orderedItems, Integer addressId, Integer sellerId) {
+    public TbOrder doPlaceOrder(List<TbOrderDetail> orderedItems, Integer addressId, Integer sellerId) {
         // 获得当前下单用户
         UserDTO userDTO = UserHolder.get();
         // 创建一份订单

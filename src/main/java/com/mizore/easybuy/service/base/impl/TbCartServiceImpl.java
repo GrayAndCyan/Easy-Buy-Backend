@@ -1,5 +1,6 @@
 package com.mizore.easybuy.service.base.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mizore.easybuy.mapper.TbCartMapper;
 import com.mizore.easybuy.model.entity.TbCart;
@@ -15,6 +16,14 @@ import org.springframework.stereotype.Service;
 public class TbCartServiceImpl extends ServiceImpl<TbCartMapper, TbCart>
     implements ITbCartService {
 
+    // 查询当前用户购物车中某件商品是否已经存在记录
+    @Override
+    public TbCart itemExist(Integer userId, Integer itemId) {
+       TbCart tbCart = this.getOne(new QueryWrapper<TbCart>()
+                .eq("user_id", userId)
+                .eq("item_id", itemId));
+        return tbCart;
+    }
 }
 
 
