@@ -43,4 +43,14 @@ public class CartItemVO {
      */
     private Integer quantity;
 
+    /**
+     * 商品上下架状态
+     */
+    private Integer status;
+
+    /**
+     * 商品上下架状态描述
+     */
+    private String statusDesc;
+
 }

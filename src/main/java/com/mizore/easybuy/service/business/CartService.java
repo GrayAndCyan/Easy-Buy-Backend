@@ -8,6 +8,7 @@ import com.mizore.easybuy.model.dto.UserDTO;
 import com.mizore.easybuy.model.entity.TbCart;
 import com.mizore.easybuy.model.entity.TbItem;
 import com.mizore.easybuy.model.entity.TbSeller;
+import com.mizore.easybuy.model.enums.ItemStatusEnum;
 import com.mizore.easybuy.model.enums.ReturnEnum;
 import com.mizore.easybuy.model.query.CartAddQuery;
 import com.mizore.easybuy.model.vo.*;
@@ -113,6 +114,8 @@ public class CartService {
                             .description(tbItem.getDescription())
                             .price(tbItem.getPrice())
                             .quantity(x.getQuantity())
+                            .status(tbItem.getStatus())
+                            .statusDesc(ItemStatusEnum.getDescByCode(tbItem.getStatus()))
                             .build();
                 }
         ).toList();
