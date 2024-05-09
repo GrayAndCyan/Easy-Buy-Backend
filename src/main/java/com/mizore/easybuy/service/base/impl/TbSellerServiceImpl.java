@@ -38,7 +38,6 @@ public class TbSellerServiceImpl extends ServiceImpl<TbSellerMapper, TbSeller> i
 
     @Override
     public List<TbSeller> searchBySellerIds(List<Integer> sellerIds) {
-        // 查询当前用户的订单
         LambdaQueryWrapper<TbSeller> query = new LambdaQueryWrapper<TbSeller>()
                 .in(TbSeller::getId, sellerIds);
         return list(query);

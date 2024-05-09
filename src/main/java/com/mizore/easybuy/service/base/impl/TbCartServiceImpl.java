@@ -1,11 +1,14 @@
 package com.mizore.easybuy.service.base.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mizore.easybuy.mapper.TbCartMapper;
 import com.mizore.easybuy.model.entity.TbCart;
 import com.mizore.easybuy.service.base.ITbCartService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
 * @author AppearingOnNullday
@@ -23,6 +26,14 @@ public class TbCartServiceImpl extends ServiceImpl<TbCartMapper, TbCart>
                 .eq("user_id", userId)
                 .eq("item_id", itemId));
         return tbCart;
+    }
+
+    // 查询当前用户全部购物车记录
+    @Override
+    public List<TbCart> search(Integer userId) {
+        LambdaQueryWrapper<TbCart> query = new LambdaQueryWrapper<TbCart>()
+                .eq(TbCart::getUserId, userId);
+        return list(query);
     }
 }
 
