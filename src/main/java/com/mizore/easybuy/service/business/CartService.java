@@ -5,22 +5,23 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Maps;
 import com.mizore.easybuy.model.dto.UserDTO;
-import com.mizore.easybuy.model.entity.TbCart;
-import com.mizore.easybuy.model.entity.TbItem;
-import com.mizore.easybuy.model.entity.TbSeller;
+import com.mizore.easybuy.model.entity.*;
 import com.mizore.easybuy.model.enums.ItemStatusEnum;
+import com.mizore.easybuy.model.enums.OrderStatusEnum;
 import com.mizore.easybuy.model.enums.ReturnEnum;
 import com.mizore.easybuy.model.query.CartAddQuery;
+import com.mizore.easybuy.model.query.CartOrderItemQuery;
+import com.mizore.easybuy.model.query.CartOrderQuery;
 import com.mizore.easybuy.model.vo.*;
-import com.mizore.easybuy.service.base.ITbCartService;
-import com.mizore.easybuy.service.base.ITbItemImageService;
-import com.mizore.easybuy.service.base.ITbItemService;
-import com.mizore.easybuy.service.base.ITbSellerService;
+import com.mizore.easybuy.service.base.*;
 import com.mizore.easybuy.utils.UserHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,6 +40,12 @@ public class CartService {
 
     @Autowired
     private ITbSellerService tbSellerService;
+
+    @Autowired
+    private ITbOrderService tbOrderService;
+
+    @Autowired
+    private OrderService orderService;
 
     // 商品加入购物车
     public BaseVO<Object> addToCart(CartAddQuery cartAddQuery) {
@@ -157,5 +164,88 @@ public class CartService {
         pageVO.setTotal(resPage.getTotal());
         basePageVO.setPage(pageVO);
         return basePageVO;
+    }
+
+    // r2下单功能
+    @Transactional
+    public BaseVO<PlaceOrderVO> placeOrder(List<CartOrderQuery> cartOrderQuery,
+                                           Integer addressId) {
+        // 获取当前登录用户
+        UserDTO user = UserHolder.get();
+        // 获取用户id
+        Integer userId = user.getId();
+        // 总订单(后面所有订单的父订单)
+        TbOrder blanketOrder = new TbOrder();
+        // 设置下单用户id
+        blanketOrder.setUserId(userId);
+        // 设置订单状态为“待付款”
+        blanketOrder.setStatus(OrderStatusEnum.PENDING_PAYMENT.getCode());
+        // 设置地址id
+        blanketOrder.setAddressId(addressId);
+        // 将父订单插入数据库
+        tbOrderService.save(blanketOrder);
+//        log.info("下单时间：{}",blanketOrder.getCtime());
+//        log.info("地址id：{}",blanketOrder.getAddressId());
+        // 获得父订单id
+        Integer parentId = blanketOrder.getId();
+
+        BigDecimal sum = BigDecimal.valueOf(0); // 父订单总额
+        // 遍历每个店铺，依次下单，计算父订单总额
+        for(CartOrderQuery shop: cartOrderQuery) {
+            // 获得店铺id
+            Integer sellerId = shop.getSellerId();
+            // 获得要在该店铺下单的所有item
+            List<CartOrderItemQuery> items = shop.getItems();
+            // List<CartOrderItemQuery> -> List<TbOrderDetail>
+            List<TbOrderDetail> tbOrderDetails = items.stream().map(
+                    x -> {
+                        TbOrderDetail tbOrderDetail = new TbOrderDetail();
+                        tbOrderDetail.setItemId(x.getItemId());
+                        tbOrderDetail.setQuantity(x.getQuantity());
+                        tbOrderDetail.setUnitPrice(x.getUnitPrice());
+                        return tbOrderDetail;
+                    }
+            ).toList();
+            // 下单
+            TbOrder tbOrder = orderService.doPlaceOrder(tbOrderDetails, addressId, sellerId);
+            // 设置父订单id，更新数据库表
+            tbOrder.setParentId(parentId);
+            tbOrderService.updateById(tbOrder);
+            // 在购物车中找该商品，若该商品是在购物车中的商品，则下单后删除对应记录
+            // 获取涉及到的所有itemId
+            List<Integer> itemIds = items.stream()
+                    .map(CartOrderItemQuery::getItemId)
+                    .toList();
+            // 从购物车中删除
+            removeAfterOrder(userId, itemIds);
+            // 累加父订单总额
+            sum = sum.add(tbOrder.getTotalAmount());
+        }
+        // 更新父订单总额
+        blanketOrder.setTotalAmount(sum);
+        tbOrderService.updateById(blanketOrder);
+
+        PlaceOrderVO orderVO = PlaceOrderVO.builder()
+                .orderId(blanketOrder.getId())
+                .totalAmount(blanketOrder.getTotalAmount())
+                .userId(userId)
+                .userName(user.getUsername())
+                .ctime(blanketOrder.getCtime())
+                .build();
+
+        BaseVO<PlaceOrderVO> baseVO = new BaseVO<PlaceOrderVO>().success();
+        baseVO.setData(orderVO);
+        return baseVO;
+    }
+
+    // 下单后从购物车中删除记录
+    private void removeAfterOrder(Integer userId, List<Integer> itemIds) {
+        for(Integer itemId: itemIds) {
+            TbCart tbCart = tbCartService.itemExist(userId, itemId);
+            // 购物车中存在相应的记录
+            if(tbCart != null) {
+                tbCartService.removeById(tbCart);
+            }
+        }
     }
 }

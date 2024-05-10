@@ -77,13 +77,15 @@ public class OrderService {
     }
 
     @Transactional
-    public BaseVO<Object> placeOrder(List<TbOrderDetail> orderedItems, String addrDesc,
-                                     String addrUserName, String addrPhone, Integer sellerId) {
+    public BaseVO<Object> placeOrder(List<TbOrderDetail> orderedItems,
+                                     Integer addressId, Integer sellerId) {
         BaseVO<Object> baseVO = new BaseVO<>();
+        /*
         // 处理地址相关，得到地址id
         UserDTO user = UserHolder.get();
         Integer addressId = tbAddressService.findOrInsertAddr(
                 user.getId(), addrDesc, addrUserName, addrPhone);
+         */
 
         TbOrder tbOrder = doPlaceOrder(orderedItems, addressId, sellerId);
         // 下单失败
