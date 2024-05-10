@@ -27,7 +27,7 @@ public class CartController {
     @PostMapping("/add")
     public BaseVO<Object> addToCart(
             @RequestBody CartAddQuery cartAddQuery
-            ) {
+    ) {
         return cartService.addToCart(cartAddQuery);
     }
 
@@ -57,6 +57,38 @@ public class CartController {
             @RequestParam(value = "addressId") Integer addressId
     ) {
         return cartService.placeOrder(cartOrderQuery, addressId);
+    }
+
+    /**
+     * 从购物车中移除某商品
+     * @param itemId 商品id
+     * @return
+     */
+    @PostMapping("/remove/{itemId}")
+    public BaseVO<Object> removeItem(
+            @PathVariable(value = "itemId") Integer itemId
+    ) {
+        return cartService.removeItem(itemId);
+    }
+
+    /**
+     * 更改商品数量--加一
+     */
+    @PostMapping("/addone")
+    public BaseVO<Object> addOne(
+            @RequestBody CartAddQuery cartAddQuery
+    ) {
+        return cartService.addOne(cartAddQuery);
+    }
+
+    /**
+     * 更改商品数量--减一
+     */
+    @PostMapping("/minusone")
+    public BaseVO<Object> minusOne(
+            @RequestBody CartAddQuery cartAddQuery
+    ) {
+        return cartService.minusOne(cartAddQuery);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.mizore.easybuy.service.business;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Maps;
@@ -21,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -184,8 +184,6 @@ public class CartService {
         blanketOrder.setAddressId(addressId);
         // 将父订单插入数据库
         tbOrderService.save(blanketOrder);
-//        log.info("下单时间：{}",blanketOrder.getCtime());
-//        log.info("地址id：{}",blanketOrder.getAddressId());
         // 获得父订单id
         Integer parentId = blanketOrder.getId();
 
@@ -225,12 +223,14 @@ public class CartService {
         blanketOrder.setTotalAmount(sum);
         tbOrderService.updateById(blanketOrder);
 
+        TbOrder parentOrder = tbOrderService.getById(blanketOrder);
+
         PlaceOrderVO orderVO = PlaceOrderVO.builder()
-                .orderId(blanketOrder.getId())
-                .totalAmount(blanketOrder.getTotalAmount())
+                .orderId(parentOrder.getId())
+                .totalAmount(parentOrder.getTotalAmount())
                 .userId(userId)
                 .userName(user.getUsername())
-                .ctime(blanketOrder.getCtime())
+                .ctime(parentOrder.getCtime())
                 .build();
 
         BaseVO<PlaceOrderVO> baseVO = new BaseVO<PlaceOrderVO>().success();
@@ -247,5 +247,62 @@ public class CartService {
                 tbCartService.removeById(tbCart);
             }
         }
+    }
+
+    // 从购物车中移除商品
+    public BaseVO<Object> removeItem(Integer itemId) {
+        UserDTO user = UserHolder.get();
+        Integer userId = user.getId();      // 用户id
+        // 移除
+        QueryWrapper<TbCart> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId)
+                    .eq("item_id", itemId);
+        boolean res = tbCartService.remove(queryWrapper);
+        BaseVO<Object> baseVO = new BaseVO<>();
+        return res ? baseVO.success()
+                : baseVO.setCode(ReturnEnum.FAILURE.getCode()).setMessage("operation failed");
+    }
+
+    // 更改商品数量--加一
+    public BaseVO<Object> addOne(CartAddQuery cartAddQuery) {
+        BaseVO<Object> baseVO = new BaseVO<>().success();
+        // 当前登录用户
+        UserDTO user = UserHolder.get();
+        Integer userId = user.getId();
+        // 商品id
+        Integer itemId = cartAddQuery.getItemId();
+        // 购物车中该商品数量
+        Integer quantity = cartAddQuery.getQuantity();
+        TbCart tbCart = tbCartService.itemExist(userId, itemId);
+        if(tbCart != null) {
+            // 数量+1 存数据库
+            tbCart.setQuantity(quantity + 1);
+            tbCartService.updateById(tbCart);
+            baseVO.setData(tbCart.getQuantity());
+        }
+        return baseVO;
+    }
+
+    // 更改商品数量--减一
+    public BaseVO<Object> minusOne(CartAddQuery cartAddQuery) {
+        BaseVO<Object> baseVO = new BaseVO<>().success();
+        // 当前登录用户
+        UserDTO user = UserHolder.get();
+        Integer userId = user.getId();
+        // 商品id
+        Integer itemId = cartAddQuery.getItemId();
+        // 购物车中该商品数量
+        Integer quantity = cartAddQuery.getQuantity();
+        TbCart tbCart = tbCartService.itemExist(userId, itemId);
+        if(tbCart != null) {
+            // 购物车中物品数量最少为1，若等于1则点减号按钮不改变数量
+            if(quantity > 1) {
+                // 数量-1 存数据库
+                tbCart.setQuantity(quantity - 1);
+                tbCartService.updateById(tbCart);
+            }
+            baseVO.setData(tbCart.getQuantity());
+        }
+        return baseVO;
     }
 }
