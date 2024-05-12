@@ -6,6 +6,7 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Maps;
 import com.mizore.easybuy.config.AliPayConfig;
 import com.mizore.easybuy.model.entity.TbOrder;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -117,5 +119,19 @@ public class PayService {
         order.setStatus(OrderStatusEnum.PROCESSING.getCode());
         tbOrderService.updateById(order);
 
+        // 查询对应的子订单，更改状态===》支付成功
+        Integer parentOrderId = order.getId();
+        LambdaQueryWrapper<TbOrder> query = new LambdaQueryWrapper<TbOrder>()
+                .eq(TbOrder::getParentId, parentOrderId);
+        List<TbOrder> childOrders = tbOrderService.list(query);
+        for(TbOrder childOrder: childOrders) {
+            if (!OrderStatusEnum.PENDING_PAYMENT.getCode().equals(childOrder.getStatus())) {
+                log.error("childorder status error, should be PENDING_PAYMENT. but find status: {}", childOrder.getStatus());
+                return;
+            }
+            log.info("订单状态值：OrderStatusEnum.PROCESSING.getCode():{}",OrderStatusEnum.PROCESSING.getCode());
+            childOrder.setStatus(OrderStatusEnum.PROCESSING.getCode());
+            tbOrderService.updateById(childOrder);
+        }
     }
 }
