@@ -5,7 +5,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/EasyBuy?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root    # root
-    password: 123456    # Mizore006402.
+    password: 1234    # Mizore006402.
 
   jackson:
     default-property-inclusion: non_null # JSON处理时忽略非空字段

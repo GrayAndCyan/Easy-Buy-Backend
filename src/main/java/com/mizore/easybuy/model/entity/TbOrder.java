@@ -51,6 +51,11 @@ public class TbOrder implements Serializable {
 
     private String delinum;
 
+    /**
+     * 父订单id
+     */
+    private Integer parentId;
+
     public Integer getSellerId() {
         return sellerId;
     }
@@ -119,6 +124,14 @@ public class TbOrder implements Serializable {
         this.totalAmount = totalAmount;
     }
 
+    public Integer getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
+    }
+
     public Byte getDeleted() {
         return deleted;
     }
@@ -153,6 +166,7 @@ public class TbOrder implements Serializable {
                 ", addressId=" + addressId +
                 ", totalAmount=" + totalAmount +
                 ", sellerId=" + sellerId +
+                ", parentId=" + parentId +
                 ", deleted=" + deleted +
                 ", ctime=" + ctime +
                 ", mtime=" + mtime +

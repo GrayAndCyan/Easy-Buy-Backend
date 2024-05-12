@@ -2,7 +2,6 @@ package com.mizore.easybuy.service.base.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.mizore.easybuy.model.entity.TbOrder;
 import com.mizore.easybuy.model.entity.TbSeller;
 import com.mizore.easybuy.mapper.TbSellerMapper;
 import com.mizore.easybuy.service.base.ITbSellerService;
@@ -38,7 +37,6 @@ public class TbSellerServiceImpl extends ServiceImpl<TbSellerMapper, TbSeller> i
 
     @Override
     public List<TbSeller> searchBySellerIds(List<Integer> sellerIds) {
-        // 查询当前用户的订单
         LambdaQueryWrapper<TbSeller> query = new LambdaQueryWrapper<TbSeller>()
                 .in(TbSeller::getId, sellerIds);
         return list(query);
