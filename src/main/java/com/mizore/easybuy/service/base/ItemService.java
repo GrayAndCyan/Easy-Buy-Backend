@@ -38,6 +38,12 @@ public interface ItemService {
      */
     ItemAndImage getById(Long id);
 
+    /**
+     * 根据卖家id删除商品
+     * @param id
+     */
+    void deleteItemBySellerId(Integer id);
+
     // 商家根据条件查询商品信息，没有传的条件不做过滤
     BasePageVO<List<ItemInfo4SellerVO>> sellerGetItems(Integer categoryId, List<Integer> statuses, String keyword, Integer pageSize, Integer pageNum);
 

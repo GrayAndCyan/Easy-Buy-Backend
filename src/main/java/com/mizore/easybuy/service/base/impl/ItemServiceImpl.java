@@ -95,6 +95,17 @@ public class ItemServiceImpl implements ItemService {
     }
 
     /**
+     * 根据卖家id删除商品
+     * @param id
+     */
+    @Transactional
+    @Override
+    public void deleteItemBySellerId(Integer id) {
+        itemMapper.deleteItem(id);
+        itemMapper.deleteItemImage();
+    }
+
+    /**
      * 新增商品
      */
     public BaseVO<Object> addItem(TbItem tbItem, List<String> images) {
