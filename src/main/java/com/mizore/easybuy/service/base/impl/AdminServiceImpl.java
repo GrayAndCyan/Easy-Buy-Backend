@@ -19,6 +19,9 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     AdminMapper adminMapper;
 
+    @Autowired
+    ItemServiceImpl itemService;
+
     /**
      * 管理员查询用户列表
      * @param pageQuery
@@ -41,5 +44,6 @@ public class AdminServiceImpl implements AdminService {
         int userId = adminMapper.getUserIdById(id);
         adminMapper.sellerRemove(id);
         adminMapper.userRemove(userId);
+        itemService.deleteItemBySellerId(id);
     }
 }

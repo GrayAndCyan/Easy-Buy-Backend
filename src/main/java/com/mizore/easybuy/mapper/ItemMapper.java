@@ -5,6 +5,7 @@ import com.mizore.easybuy.model.dto.ItemPageQueryDTO;
 import com.mizore.easybuy.model.entity.ItemAndImage;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface ItemMapper {
@@ -36,4 +37,18 @@ public interface ItemMapper {
      * @param itemAndImage
      */
     void offshelf(ItemAndImage itemAndImage);
+
+    /**
+     * 根据卖家id删除商品
+     * @param id
+     */
+    @Update("update tb_item set deleted = 1 where seller_id = #{id} ")
+    void deleteItem(Integer id);
+
+    /**
+     * 删除商品图片
+     */
+    @Update("update tb_item_image set deleted = 1 where item_id in " +
+            "(select id from tb_item where deleted = 1)")
+    void deleteItemImage();
 }
