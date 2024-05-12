@@ -142,4 +142,14 @@ public class OrderController {
         return baseVO;
     }
 
+    /**
+     * 用户取消订单
+     * @param orderId 订单id
+     */
+    @PostMapping("/buyer/cancel/{id}")
+    public BaseVO<Object> cancelOrder(@PathVariable(value = "id")Integer orderId) {
+        orderService.cancelOrder(orderId);
+        return new BaseVO<>().success();
+    }
+
 }

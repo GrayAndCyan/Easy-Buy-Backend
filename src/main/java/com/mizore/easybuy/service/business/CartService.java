@@ -93,6 +93,18 @@ public class CartService {
         Integer userId = user.getId();
         // 获取当前用户购物车中所有条目
         List<TbCart> tbCart = tbCartService.search(userId);
+        // 若当前用户购物车为空，直接返回
+        if(CollectionUtil.isEmpty(tbCart)) {
+            log.error("empty shopping cart");
+            BasePageVO<List<CartInfoVO>> basePageVO = new BasePageVO<List<CartInfoVO>>().success();
+            List<CartInfoVO> cartInfoVO = new ArrayList<>();
+            basePageVO.setData(cartInfoVO);
+            PageVO pageVO = new PageVO(pageSize, pageNum);
+            pageVO.setPages(resPage.getPages());
+            pageVO.setTotal(resPage.getTotal());
+            basePageVO.setPage(pageVO);
+            return basePageVO;
+        }
         // 获取涉及到的所有itemId
         List<Integer> itemIds = tbCart.stream()
                 .map(TbCart::getItemId)

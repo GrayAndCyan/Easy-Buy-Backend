@@ -552,4 +552,22 @@ public class OrderService {
         basePageVO.setPage(pageVO);
         return basePageVO;
     }
+
+    public void cancelOrder(Integer orderId) {
+        if (orderId == null) {
+            log.error("orderId == null.");
+            return;
+        }
+
+        TbOrder order = tbOrderService.getById(orderId);
+        // 取消订单需要是待付款状态的订单
+        Integer status = order.getStatus();
+        if (!OrderStatusEnum.PENDING_PAYMENT.getCode().equals(status)) {
+            log.error("订单状态不符合预期： order: {}", order);
+            return;
+        }
+
+        order.setStatus(OrderStatusEnum.CANCELLED.getCode());
+        tbOrderService.updateById(order);
+    }
 }
