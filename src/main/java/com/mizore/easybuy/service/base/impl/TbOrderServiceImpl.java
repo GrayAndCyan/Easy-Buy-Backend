@@ -45,9 +45,10 @@ public class TbOrderServiceImpl extends ServiceImpl<TbOrderMapper, TbOrder> impl
 
     @Override
     public List<TbOrder> buyerSearch(Integer orderId, Integer sellerId, List<Integer> status, int userId) {
-        // 查询当前用户的订单
+        // 查询当前用户的订单，不包括父订单
         LambdaQueryWrapper<TbOrder> query = new LambdaQueryWrapper<TbOrder>()
-                .eq(TbOrder::getUserId, userId);
+                .eq(TbOrder::getUserId, userId)
+                .ne(TbOrder::getParentId, 0);
         // 可选择按订单号查询
         if (orderId != null) {
             query.eq(TbOrder::getId, orderId);
