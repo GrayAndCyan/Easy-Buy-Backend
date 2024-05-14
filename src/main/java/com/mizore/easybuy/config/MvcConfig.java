@@ -20,7 +20,7 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginInterceptor(userService))
                 .excludePathPatterns(
                         "/user/login",
-                        "/user/sign"
+                        "/user/register"
                 );  // todo 排除登陆注册接口
     }
 }

@@ -51,6 +51,11 @@ public class ItemAndImage implements Serializable {
     private Integer stock;
 
     /**
+     * 商品上下架状态，1：已上架，2：已下架
+     */
+    private Integer status;
+
+    /**
      * 软删标识，0：未删除，1：已删除
      */
     @TableLogic

@@ -26,7 +26,7 @@ public class TbItemImageServiceImpl extends ServiceImpl<TbItemImageMapper, TbIte
     @Override
     public String getFirstImgUrl(Integer itemId) {
         LambdaQueryWrapper<TbItemImage> query = new LambdaQueryWrapper<TbItemImage>()
-                .eq(TbItemImage::getId, itemId);
+                .eq(TbItemImage::getItemId, itemId);
         List<TbItemImage> images = list(query);
 
         Optional<TbItemImage> first = images.stream()

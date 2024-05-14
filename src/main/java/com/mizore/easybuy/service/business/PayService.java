@@ -1,7 +1,5 @@
 package com.mizore.easybuy.service.business;
 
-
-import cn.hutool.http.server.HttpServerRequest;
 import cn.hutool.json.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
@@ -13,7 +11,6 @@ import com.mizore.easybuy.config.AliPayConfig;
 import com.mizore.easybuy.model.entity.TbOrder;
 import com.mizore.easybuy.model.enums.OrderStatusEnum;
 import com.mizore.easybuy.model.query.PayQuery;
-import com.mizore.easybuy.model.vo.BaseVO;
 import com.mizore.easybuy.service.base.impl.TbOrderServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -40,6 +37,7 @@ public class PayService {
     private static final String FORMAT = "JSON";
 
     private static final String CHARSET = "UTF-8";
+
 
     //签名方式
     private static final String SIGN_TYPE = "RSA2";
@@ -115,6 +113,7 @@ public class PayService {
             log.error("order status error, should be PENDING_PAYMENT. but find status: {}", order.getStatus());
             return;
         }
+        log.info("订单状态值：OrderStatusEnum.PROCESSING.getCode():{}",OrderStatusEnum.PROCESSING.getCode());
         order.setStatus(OrderStatusEnum.PROCESSING.getCode());
         tbOrderService.updateById(order);
 

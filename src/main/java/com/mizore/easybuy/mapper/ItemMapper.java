@@ -24,4 +24,16 @@ public interface ItemMapper {
     @Select("select a.*,b.url from tb_item a left join tb_item_image b on a.id = b.item_id " +
             "where a.id = #{id}")
     ItemAndImage getById(Long id);
+
+    /**
+     * 根据商品id上架商品
+     * @param itemAndImage
+     */
+    void onshelf(ItemAndImage itemAndImage);
+
+    /**
+     * 根据商品id下架商品
+     * @param itemAndImage
+     */
+    void offshelf(ItemAndImage itemAndImage);
 }

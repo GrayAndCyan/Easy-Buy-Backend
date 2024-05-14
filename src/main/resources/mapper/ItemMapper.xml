@@ -11,8 +11,27 @@
                 and a.category_id = #{categoryId}
             </if>
                 and a.deleted = 0
+                and a.status = 1
         </where>
         order by a.ctime desc
     </select>
+
+    <update id="onshelf">
+        update tb_item
+        <set>
+            status = #{status},
+            mtime = #{mtime}
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="offshelf">
+        update tb_item
+        <set>
+            status = #{status},
+            mtime = #{mtime}
+        </set>
+        where id = #{id}
+    </update>
 
 </mapper>
