@@ -2,13 +2,11 @@ package com.mizore.easybuy.api.http;
 
 import com.mizore.easybuy.model.entity.TbAddress;
 import com.mizore.easybuy.model.vo.BasePageVO;
+import com.mizore.easybuy.model.vo.BaseVO;
 import com.mizore.easybuy.service.base.ITbAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,4 +33,12 @@ public class AddressController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PostMapping("/delete")
+    public int deleteAddress(@RequestParam("addressId") Integer addressId) {
+        return tbAddressService.deleteAddress(addressId);
+    }
+
+
+
 }
