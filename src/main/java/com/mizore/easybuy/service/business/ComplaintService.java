@@ -5,22 +5,17 @@ import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mizore.easybuy.model.dto.UserDTO;
-import com.mizore.easybuy.model.entity.TbComplaint;
-import com.mizore.easybuy.model.entity.TbOrder;
-import com.mizore.easybuy.model.entity.TbSeller;
-import com.mizore.easybuy.model.entity.TbUser;
+import com.mizore.easybuy.model.entity.*;
 import com.mizore.easybuy.model.enums.ComplaintStatusEnum;
 import com.mizore.easybuy.model.enums.ComplaintTypeEnum;
 import com.mizore.easybuy.model.enums.RoleEnum;
 import com.mizore.easybuy.model.query.ComplaintSaveQuery;
 import com.mizore.easybuy.model.vo.BaseVO;
 import com.mizore.easybuy.model.vo.ComplaintSearchVO;
-import com.mizore.easybuy.service.base.ITbComplaintService;
-import com.mizore.easybuy.service.base.ITbOrderService;
-import com.mizore.easybuy.service.base.ITbSellerService;
-import com.mizore.easybuy.service.base.ITbUserService;
+import com.mizore.easybuy.service.base.*;
 import com.mizore.easybuy.utils.UserHolder;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +25,7 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 
 @Service
+@Slf4j
 public class ComplaintService {
 
     @Autowired
@@ -43,6 +39,9 @@ public class ComplaintService {
 
     @Autowired
     private ITbSellerService sellerService;
+
+    @Autowired
+    private ITbAddressService addressService;
 
     private Map<Integer, BiConsumer<TbComplaint, ComplaintSearchVO>> complaintVOBuilders;
 
@@ -113,6 +112,20 @@ public class ComplaintService {
             return new ComplaintSearchVO();
         }
         Integer orderId = tbComplaint.getOrderId();
+        // 查订单预留手机号
+        TbOrder tbOrder = orderService.getById(orderId);
+        String phone = StrUtil.EMPTY;
+        if (tbOrder == null) {
+            log.warn("order is null . orderId: {}", orderId);
+        } else {
+            Integer addressId = tbOrder.getAddressId();
+            if (addressId == null) {
+                log.warn("addressId is null . orderId: {}", orderId);
+            } else {
+                TbAddress tbAddress = addressService.getById(addressId);
+                phone = tbAddress.getAddrPhone();
+            }
+        }
         String reason = tbComplaint.getReason();
         Integer status = tbComplaint.getStatus();
         Integer type = tbComplaint.getType();
@@ -120,6 +133,7 @@ public class ComplaintService {
                 .complaintId(tbComplaint.getId())
                 .ctime(tbComplaint.getCtime())
                 .orderId(orderId)
+                .phone(phone)
                 .reason(StrUtil.isBlank(reason) ? StrUtil.EMPTY : reason)
                 .statusCode(status)
                 .statusDesc(ComplaintStatusEnum.getByCode(status).getDesc())
