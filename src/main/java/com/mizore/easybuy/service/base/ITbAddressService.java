@@ -26,5 +26,5 @@ public interface ITbAddressService extends IService<TbAddress> {
     int findOrInsertAddr(Integer userid, String address, String username, String phone);
 
 
-    List<TbAddress> searchadd(Integer userId);
+    List<TbAddress> searchadd();
 }

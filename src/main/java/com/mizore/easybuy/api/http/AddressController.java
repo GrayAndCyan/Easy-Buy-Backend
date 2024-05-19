@@ -26,9 +26,20 @@ public class AddressController {
     @Autowired
     private ITbAddressService tbAddressService;
 
+    /*
     @GetMapping("/search")
     public ResponseEntity<List<TbAddress>> searchAddress(@RequestParam("userId") Integer userId) {
         List<TbAddress> addresses = tbAddressService.searchadd(userId);
+        if (addresses != null && !addresses.isEmpty()) {
+            return ResponseEntity.ok(addresses);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }*/
+
+    @GetMapping("/search")
+    public ResponseEntity<List<TbAddress>> searchAddress() {
+        List<TbAddress> addresses = tbAddressService.searchadd();
         if (addresses != null && !addresses.isEmpty()) {
             return ResponseEntity.ok(addresses);
         } else {

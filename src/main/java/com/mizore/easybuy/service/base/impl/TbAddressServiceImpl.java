@@ -2,10 +2,12 @@ package com.mizore.easybuy.service.base.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.mizore.easybuy.model.dto.UserDTO;
 import com.mizore.easybuy.model.entity.TbAddress;
 import com.mizore.easybuy.mapper.TbAddressMapper;
 import com.mizore.easybuy.service.base.ITbAddressService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.mizore.easybuy.utils.UserHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -69,7 +71,10 @@ public class TbAddressServiceImpl extends ServiceImpl<TbAddressMapper, TbAddress
     }
 
     @Override
-    public List<TbAddress> searchadd(Integer userId){
+    public List<TbAddress> searchadd(){
+        UserDTO user = UserHolder.get();
+        Integer userId = user.getId();
+
         LambdaQueryWrapper<TbAddress> query = new LambdaQueryWrapper<TbAddress>()
                 .eq(TbAddress::getUserId,userId);
         return list(query);
