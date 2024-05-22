@@ -43,6 +43,9 @@ public class ComplaintService {
     @Autowired
     private ITbAddressService addressService;
 
+    @Autowired
+    private MailService mailService;
+
     private Map<Integer, BiConsumer<TbComplaint, ComplaintSearchVO>> complaintVOBuilders;
 
     @PostConstruct
@@ -84,6 +87,14 @@ public class ComplaintService {
                 .type(complaintTypeCode)
                 .build();
         boolean res = complaintService.save(toSave);
+
+        // 成功保存后，给admin发送邮件
+        if(res) {
+            Integer orderId = complaintSaveQuery.getOrderId();
+            String reason = complaintSaveQuery.getReason();
+            mailService.sendMail(orderId, reason);
+        }
+
         return res ? baseVO.success() : baseVO.failure().setMessage("保存失败！！");
     }
 
