@@ -423,7 +423,7 @@ public class OrderService {
         TbOrder order = tbOrderService.getById(orderId);
         if (order != null && Objects.equals(order.getStatus(), OrderStatusEnum.PROCESSING.getCode())) {
             order.setStatus(OrderStatusEnum.SHIPPED.getCode());
-            order.setDeliveryNumber(delinum); // 将 delinum 设置到订单实体类中的 deliveryNumber 字段
+            order.setDelinum(delinum); // 将 delinum 设置到订单实体类中的 deliveryNumber 字段
             tbOrderService.updateById(order);
         }
     }
@@ -540,6 +540,8 @@ public class OrderService {
                     .addrDesc(tbAddress != null ? tbAddress.getAddrDesc() : StrUtil.EMPTY)
                     .addrUsername(tbAddress != null ? tbAddress.getAddrUsername() : StrUtil.EMPTY)
                     .addrPhone(tbAddress != null ? tbAddress.getAddrPhone() : StrUtil.EMPTY)
+
+                    .delinum(tbOrder.getDeliveryNumber())
                     .build();
             res.add(orderInfo);
         }

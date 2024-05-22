@@ -60,6 +60,11 @@ public class OrderInfo4BuyerVO {
     private BigDecimal totalAmount;
 
     /**
+     * 订单号
+     */
+    private String delinum;
+
+    /**
      * 创建时间
      */
     private LocalDateTime ctime;

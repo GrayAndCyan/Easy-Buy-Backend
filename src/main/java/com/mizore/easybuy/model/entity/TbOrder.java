@@ -104,7 +104,7 @@ public class TbOrder implements Serializable {
         this.status = status;
     }
 
-    public void setDeliveryNumber(String delinum){this.delinum=delinum;}
+    public void setDelinum(String delinum){this.delinum=delinum;}
 
     public String getDeliveryNumber(){return delinum;}
 

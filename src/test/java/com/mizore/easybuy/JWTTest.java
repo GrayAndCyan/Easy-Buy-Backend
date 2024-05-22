@@ -21,7 +21,7 @@ public class JWTTest {
     public void getAToken() {
         Map<String, Object> claims = Maps.newHashMap();
         claims.put("id", 1);
-        claims.put("username", "mizore");
+        claims.put("username", "buyer1");
         claims.put("role", 1);
         String jwt = JWTUtil.generateJWT(claims);
         System.out.println(jwt);

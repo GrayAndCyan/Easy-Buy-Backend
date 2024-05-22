@@ -128,6 +128,7 @@ public class CartService {
                     TbItem tbItem = itemMap.get(itemId);
                     return CartItemVO.builder()
                             .itemId(itemId)
+                            .sellerId(tbItem.getSellerId())
                             .title(tbItem.getTitle())
                             .img(tbItemImageService.getFirstImgUrl(itemId))
                             .description(tbItem.getDescription())

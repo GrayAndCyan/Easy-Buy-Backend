@@ -28,6 +28,8 @@ public class CartController {
     public BaseVO<Object> addToCart(
             @RequestBody CartAddQuery cartAddQuery
     ) {
+        log.info("进入添加至购物车接口");
+        log.info("添加至购物车--itemid:{}, quantity:{}",cartAddQuery.getItemId(),cartAddQuery.getQuantity());
         return cartService.addToCart(cartAddQuery);
     }
 
@@ -56,6 +58,7 @@ public class CartController {
             @RequestBody List<CartOrderQuery> cartOrderQuery,
             @RequestParam(value = "addressId") Integer addressId
     ) {
+        log.info("卖家id：{}",cartOrderQuery.getFirst().getSellerId());
         return cartService.placeOrder(cartOrderQuery, addressId);
     }
 

@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public enum ComplaintStatusEnum {
 
-    PROCESSING(1, "处理中"),
+    PROCESSING(1, "processing"),
 
-    FINISHED(2, "已完成");
+    FINISHED(2, "completed");
 
     private Integer code;
 

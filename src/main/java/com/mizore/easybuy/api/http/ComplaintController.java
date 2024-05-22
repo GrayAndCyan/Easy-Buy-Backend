@@ -4,11 +4,13 @@ import com.mizore.easybuy.model.query.ComplaintSaveQuery;
 import com.mizore.easybuy.model.vo.BaseVO;
 import com.mizore.easybuy.model.vo.ComplaintSearchVO;
 import com.mizore.easybuy.service.business.ComplaintService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("complaint")
 public class ComplaintController {
@@ -29,7 +31,7 @@ public class ComplaintController {
     public BaseVO<List<ComplaintSearchVO>> search(
             @RequestParam(required = false) Integer status
     ) {
-
+        log.info("投诉信息查询：");
         return complaintService.search(status);
     }
 

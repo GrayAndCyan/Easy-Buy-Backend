@@ -18,6 +18,9 @@ public class CartItemVO {
      */
     private Integer itemId;
 
+    // 店铺id
+    private Integer sellerId;
+
     /**
      * 商品名称
      */
