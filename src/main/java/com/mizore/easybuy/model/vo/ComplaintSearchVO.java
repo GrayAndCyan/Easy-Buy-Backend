@@ -36,6 +36,11 @@ public class ComplaintSearchVO {
     private Integer orderId;
 
     /**
+     * 订单留的手机号
+     */
+    private String phone;
+
+    /**
      * 投诉原因
      */
     private String reason;
