@@ -4,11 +4,18 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/EasyBuy?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: mizore    # root
-    password: mizore    # Mizore006402.
+    username: root    # root
+    password: 1234    # Mizore006402.
 
   jackson:
     default-property-inclusion: non_null # JSON处理时忽略非空字段
+
+  mail:
+    host: smtp.126.com
+    username: EasyBuyServer@126.com
+    password: FWIDNNXOTKUEFOSC # 授权码
+    from: EasyBuyServer@126.com # 发送者
+    to: EasyBuyAdmin@126.com # 接受者
 
 jwt:
   secret-key-str: huHAQ21P5fsGgpnHKipREwz4zgwUxJ8bGl+gmW4mbl4=
