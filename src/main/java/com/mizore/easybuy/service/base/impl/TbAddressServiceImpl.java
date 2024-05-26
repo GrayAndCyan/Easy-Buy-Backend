@@ -34,7 +34,9 @@ public class TbAddressServiceImpl extends ServiceImpl<TbAddressMapper, TbAddress
 
     @Override
     public int deleteAddress(Integer id) {
-        return baseMapper.deleteById(id);
+        TbAddress tbAddress=this.getOne(new QueryWrapper<TbAddress>().eq("id",id));
+        tbAddress.setDeleted((byte) 1);
+        return 1;
     }
 
     @Override
@@ -76,7 +78,8 @@ public class TbAddressServiceImpl extends ServiceImpl<TbAddressMapper, TbAddress
         Integer userId = user.getId();
 
         LambdaQueryWrapper<TbAddress> query = new LambdaQueryWrapper<TbAddress>()
-                .eq(TbAddress::getUserId,userId);
+                .eq(TbAddress::getUserId,userId)
+                .eq(TbAddress::getDeleted, 0);
         return list(query);
     }
 }

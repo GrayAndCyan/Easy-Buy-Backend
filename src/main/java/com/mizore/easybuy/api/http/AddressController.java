@@ -53,4 +53,12 @@ public class AddressController {
         tbAddressService.deleteAddress(addressId);
         return baseVO;
     }
+
+    @PostMapping("/delete")
+    public int deleteAddress(@RequestParam("addressId") Integer addressId) {
+        return tbAddressService.deleteAddress(addressId);
+    }
+
+
+
 }
