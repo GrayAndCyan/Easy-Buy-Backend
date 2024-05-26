@@ -79,7 +79,7 @@ public class OrderController {
     public BaseVO<Object> sendOrder(@PathVariable(value = "orderId") Integer orderId,
                                     @RequestParam(value = "delinum") String delinum,
                                     @RequestParam(value = "delicom") String delicom) {
-        log.info("订单号：{}",delinum,delicom);
+        log.info("订单号：{}, 快递公司：{}", delinum, delicom);
         orderService.sendOrder(orderId, delinum, delicom);
         return new BaseVO<>().success();
     }
