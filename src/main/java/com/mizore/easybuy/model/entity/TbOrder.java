@@ -51,6 +51,8 @@ public class TbOrder implements Serializable {
 
     private String delinum;
 
+    private String delicom;
+
     /**
      * 父订单id
      */
@@ -108,6 +110,10 @@ public class TbOrder implements Serializable {
 
     public String getDeliveryNumber(){return delinum;}
 
+    public void setDelicom(String delicom){this.delicom=delicom;}
+
+    public String getDelicom(){return delicom;}
+
     public Integer getAddressId() {
         return addressId;
     }
@@ -162,7 +168,8 @@ public class TbOrder implements Serializable {
                 "id=" + id +
                 ", userId=" + userId +
                 ", status=" + status +
-                ", delinum+" + delinum +
+                ", delinum=" + delinum +
+                ", delicom=" + delicom +
                 ", addressId=" + addressId +
                 ", totalAmount=" + totalAmount +
                 ", sellerId=" + sellerId +

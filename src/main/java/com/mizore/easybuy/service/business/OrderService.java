@@ -419,11 +419,12 @@ public class OrderService {
             tbOrderService.updateById(order);
         }
     }*/
-    public void sendOrder(Integer orderId, String delinum) {
+    public void sendOrder(Integer orderId, String delinum, String delicom) {
         TbOrder order = tbOrderService.getById(orderId);
         if (order != null && Objects.equals(order.getStatus(), OrderStatusEnum.PROCESSING.getCode())) {
             order.setStatus(OrderStatusEnum.SHIPPED.getCode());
             order.setDelinum(delinum); // 将 delinum 设置到订单实体类中的 deliveryNumber 字段
+            order.setDelicom(delicom);
             tbOrderService.updateById(order);
         }
     }
