@@ -543,6 +543,7 @@ public class OrderService {
                     .addrPhone(tbAddress != null ? tbAddress.getAddrPhone() : StrUtil.EMPTY)
 
                     .delinum(tbOrder.getDeliveryNumber())
+                    .delicom(tbOrder.getDelicom())
                     .build();
             res.add(orderInfo);
         }

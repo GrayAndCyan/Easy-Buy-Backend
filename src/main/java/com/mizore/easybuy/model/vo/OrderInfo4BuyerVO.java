@@ -65,6 +65,11 @@ public class OrderInfo4BuyerVO {
     private String delinum;
 
     /**
+     * 快递公司
+     */
+    private String delicom;
+
+    /**
      * 创建时间
      */
     private LocalDateTime ctime;
