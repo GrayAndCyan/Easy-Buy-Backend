@@ -77,9 +77,10 @@ public class OrderController {
 
     @PostMapping("/seller/send/{orderId}")
     public BaseVO<Object> sendOrder(@PathVariable(value = "orderId") Integer orderId,
-                                    @RequestParam(value = "delinum") String delinum) {
-        log.info("订单号：{}",delinum);
-        orderService.sendOrder(orderId, delinum);
+                                    @RequestParam(value = "delinum") String delinum,
+                                    @RequestParam(value = "delicom") String delicom) {
+        log.info("订单号：{}",delinum,delicom);
+        orderService.sendOrder(orderId, delinum, delicom);
         return new BaseVO<>().success();
     }
 
