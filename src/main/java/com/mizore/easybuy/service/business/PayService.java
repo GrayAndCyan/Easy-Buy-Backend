@@ -1,6 +1,8 @@
 package com.mizore.easybuy.service.business;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
+import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
@@ -10,9 +12,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Maps;
 import com.mizore.easybuy.config.AliPayConfig;
 import com.mizore.easybuy.model.entity.TbOrder;
+import com.mizore.easybuy.model.enums.ObjectType;
 import com.mizore.easybuy.model.enums.OrderStatusEnum;
 import com.mizore.easybuy.model.query.PayQuery;
 import com.mizore.easybuy.service.base.impl.TbOrderServiceImpl;
+import com.mizore.easybuy.utils.audit.AuditUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -70,6 +74,10 @@ public class PayService {
         httpResponse.getWriter().write(form);// 直接将完整的表单html输出到页面
         httpResponse.getWriter().flush();
         httpResponse.getWriter().close();
+
+        AuditUtils.doAuditAsync(JSON.toJSONString(payQuery),
+                Integer.parseInt(payQuery.getTraceNo()),
+                ObjectType.ORDER.getDesc());
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -133,5 +141,7 @@ public class PayService {
             childOrder.setStatus(OrderStatusEnum.PROCESSING.getCode());
             tbOrderService.updateById(childOrder);
         }
+
+        AuditUtils.doAuditAsync(JSON.toJSONString(childOrders), parentOrderId, ObjectType.ORDER.getDesc());
     }
 }

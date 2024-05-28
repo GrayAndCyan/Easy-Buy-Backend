@@ -1,7 +1,9 @@
 package com.mizore.easybuy.api.http;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.mizore.easybuy.annotation.Audit;
 import com.mizore.easybuy.model.entity.TbOrderDetail;
+import com.mizore.easybuy.model.enums.EventTypeEnums;
 import com.mizore.easybuy.model.vo.BasePageVO;
 import com.mizore.easybuy.model.vo.BaseVO;
 import com.mizore.easybuy.model.vo.OrderInfo4BuyerVO;
@@ -29,6 +31,7 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @Audit(eventType = EventTypeEnums.BUYER_CONFIRM_RECEIPT)
     @PostMapping("/buyer/confirm/{id}")
     public BaseVO<Object> confirmReceive(@PathVariable(value = "id")Integer orderId) {
         orderService.confirmReceive(orderId);
@@ -93,6 +96,7 @@ public class OrderController {
      * @return
      * @throws RuntimeException
      */
+    @Audit(eventType = EventTypeEnums.BUYER_PLACE_ORDER)
     @PostMapping("/order")
     public BaseVO<Object> placeOrder(
             @RequestBody List<TbOrderDetail> orderedItems,
