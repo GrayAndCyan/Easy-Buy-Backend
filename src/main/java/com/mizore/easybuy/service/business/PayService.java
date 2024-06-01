@@ -1,6 +1,5 @@
 package com.mizore.easybuy.service.business;
 
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
@@ -12,7 +11,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Maps;
 import com.mizore.easybuy.config.AliPayConfig;
 import com.mizore.easybuy.model.entity.TbOrder;
-import com.mizore.easybuy.model.enums.ObjectType;
+import com.mizore.easybuy.model.enums.ObjectTypeEnums;
 import com.mizore.easybuy.model.enums.OrderStatusEnum;
 import com.mizore.easybuy.model.query.PayQuery;
 import com.mizore.easybuy.service.base.impl.TbOrderServiceImpl;
@@ -77,7 +76,7 @@ public class PayService {
 
         AuditUtils.doAuditAsync(JSON.toJSONString(payQuery),
                 Integer.parseInt(payQuery.getTraceNo()),
-                ObjectType.ORDER.getDesc());
+                ObjectTypeEnums.ORDER.getDesc());
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -142,6 +141,6 @@ public class PayService {
             tbOrderService.updateById(childOrder);
         }
 
-        AuditUtils.doAuditAsync(JSON.toJSONString(childOrders), parentOrderId, ObjectType.ORDER.getDesc());
+        AuditUtils.doAuditAsync(JSON.toJSONString(childOrders), parentOrderId, ObjectTypeEnums.ORDER.getDesc());
     }
 }

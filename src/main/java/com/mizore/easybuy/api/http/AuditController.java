@@ -1,5 +1,7 @@
 package com.mizore.easybuy.api.http;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
+import com.mizore.easybuy.model.vo.AuditEnumVO;
 import com.mizore.easybuy.model.vo.AuditVO;
 import com.mizore.easybuy.model.vo.BaseVO;
 import com.mizore.easybuy.service.business.AuditService;
@@ -32,6 +34,11 @@ public class AuditController {
                 objectId, objectType,
                 eventType, detailKeywords,
                 startTime, endTime));
+    }
+
+    @GetMapping("/meta")
+    public BaseVO<AuditEnumVO> getEnums() {
+        return new BaseVO<AuditEnumVO>().success().setData(AuditEnumVO.getInstance());
     }
 
 }

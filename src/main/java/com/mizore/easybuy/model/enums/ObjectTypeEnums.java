@@ -1,14 +1,14 @@
 package com.mizore.easybuy.model.enums;
 
 // 客体类型，用于审计记录action作用的对象 类型
-public enum ObjectType {
+public enum ObjectTypeEnums {
     ORDER("order");
 
     public String getDesc() {
         return desc;
     }
 
-    ObjectType(String desc) {
+    ObjectTypeEnums(String desc) {
         this.desc = desc;
     }
 

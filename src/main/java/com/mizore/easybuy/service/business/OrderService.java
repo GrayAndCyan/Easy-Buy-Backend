@@ -12,7 +12,7 @@ import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mizore.easybuy.model.entity.*;
-import com.mizore.easybuy.model.enums.ObjectType;
+import com.mizore.easybuy.model.enums.ObjectTypeEnums;
 import com.mizore.easybuy.model.enums.OrderStatusEnum;
 import com.mizore.easybuy.model.enums.ReturnEnum;
 import com.mizore.easybuy.model.vo.*;
@@ -78,7 +78,7 @@ public class OrderService {
         order.setStatus(OrderStatusEnum.DELIVERED.getCode());
         tbOrderService.updateById(order);
 
-        AuditUtils.doAuditAsync(JSON.toJSONString(order), orderId, ObjectType.ORDER.getDesc());
+        AuditUtils.doAuditAsync(JSON.toJSONString(order), orderId, ObjectTypeEnums.ORDER.getDesc());
     }
 
     @Transactional
@@ -104,7 +104,7 @@ public class OrderService {
                 .setMessage("order succeed")
                 .setData(tbOrder);
 
-        AuditUtils.doAuditAsync(JSON.toJSONString(tbOrder), tbOrder.getId(), ObjectType.ORDER.getDesc());
+        AuditUtils.doAuditAsync(JSON.toJSONString(tbOrder), tbOrder.getId(), ObjectTypeEnums.ORDER.getDesc());
         return baseVO;
     }
 
