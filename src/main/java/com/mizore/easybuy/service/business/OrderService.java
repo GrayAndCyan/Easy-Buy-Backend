@@ -1,5 +1,6 @@
 package com.mizore.easybuy.service.business;
 
+import com.alibaba.fastjson.JSON;
 import com.mizore.easybuy.model.dto.UserDTO;
 import com.mizore.easybuy.model.entity.TbItem;
 import com.mizore.easybuy.model.entity.TbOrder;
@@ -11,6 +12,7 @@ import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mizore.easybuy.model.entity.*;
+import com.mizore.easybuy.model.enums.ObjectTypeEnums;
 import com.mizore.easybuy.model.enums.OrderStatusEnum;
 import com.mizore.easybuy.model.enums.ReturnEnum;
 import com.mizore.easybuy.model.vo.*;
@@ -19,6 +21,7 @@ import com.mizore.easybuy.service.base.ITbOrderDetailService;
 import com.mizore.easybuy.service.base.ITbOrderService;
 import com.mizore.easybuy.utils.UserHolder;
 import com.mizore.easybuy.service.base.*;
+import com.mizore.easybuy.utils.audit.AuditUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,6 +77,8 @@ public class OrderService {
 
         order.setStatus(OrderStatusEnum.DELIVERED.getCode());
         tbOrderService.updateById(order);
+
+        AuditUtils.doAuditAsync(JSON.toJSONString(order), orderId, ObjectTypeEnums.ORDER.getDesc());
     }
 
     @Transactional
@@ -98,6 +103,8 @@ public class OrderService {
         baseVO.setCode(200)
                 .setMessage("order succeed")
                 .setData(tbOrder);
+
+        AuditUtils.doAuditAsync(JSON.toJSONString(tbOrder), tbOrder.getId(), ObjectTypeEnums.ORDER.getDesc());
         return baseVO;
     }
 

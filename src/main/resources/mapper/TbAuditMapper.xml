@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mizore.easybuy.mapper.TbAuditMapper">
+
+    <resultMap id="BaseResultMap" type="com.mizore.easybuy.model.entity.TbAudit">
+            <id property="id" column="id" jdbcType="OTHER"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="username" column="username" jdbcType="VARCHAR"/>
+            <result property="objectId" column="object_id" jdbcType="INTEGER"/>
+            <result property="objectType" column="object_type" jdbcType="VARCHAR"/>
+            <result property="eventType" column="event_type" jdbcType="VARCHAR"/>
+            <result property="requestUrl" column="request_url" jdbcType="VARCHAR"/>
+            <result property="requestParam" column="request_param" jdbcType="VARCHAR"/>
+            <result property="detail" column="detail" jdbcType="VARCHAR"/>
+            <result property="deleted" column="deleted" jdbcType="TINYINT"/>
+            <result property="actionTime" column="action_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_id,username,
+        object_id,object_type,event_type,
+        request_url,request_param,detail,
+        deleted,action_time
+    </sql>
+</mapper>

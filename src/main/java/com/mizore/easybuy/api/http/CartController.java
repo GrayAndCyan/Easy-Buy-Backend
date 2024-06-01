@@ -58,7 +58,7 @@ public class CartController {
             @RequestBody List<CartOrderQuery> cartOrderQuery,
             @RequestParam(value = "addressId") Integer addressId
     ) {
-        log.info("卖家id：{}",cartOrderQuery.getFirst().getSellerId());
+        log.info("卖家id：{}",cartOrderQuery.get(0).getSellerId());
         return cartService.placeOrder(cartOrderQuery, addressId);
     }
 
