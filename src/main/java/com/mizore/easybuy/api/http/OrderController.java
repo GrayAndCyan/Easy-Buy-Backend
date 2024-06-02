@@ -79,6 +79,7 @@ public class OrderController {
     }*/
 
     @PostMapping("/seller/send/{orderId}")
+    @Audit(eventType = EventTypeEnums.SELLER_SEND_ORDER)
     public BaseVO<Object> sendOrder(@PathVariable(value = "orderId") Integer orderId,
                                     @RequestParam(value = "delinum") String delinum,
                                     @RequestParam(value = "delicom") String delicom) {
@@ -152,6 +153,7 @@ public class OrderController {
      * 用户取消订单
      * @param orderId 订单id
      */
+    @Audit(eventType = EventTypeEnums.BUYER_CANCEL_ORDER)
     @PostMapping("/buyer/cancel/{id}")
     public BaseVO<Object> cancelOrder(@PathVariable(value = "id")Integer orderId) {
         orderService.cancelOrder(orderId);

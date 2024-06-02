@@ -2,18 +2,18 @@ package com.mizore.easybuy.service.business;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mizore.easybuy.model.dto.UserDTO;
 import com.mizore.easybuy.model.entity.*;
-import com.mizore.easybuy.model.enums.ComplaintStatusEnum;
-import com.mizore.easybuy.model.enums.ComplaintTypeEnum;
-import com.mizore.easybuy.model.enums.RoleEnum;
+import com.mizore.easybuy.model.enums.*;
 import com.mizore.easybuy.model.query.ComplaintSaveQuery;
 import com.mizore.easybuy.model.vo.BaseVO;
 import com.mizore.easybuy.model.vo.ComplaintSearchVO;
 import com.mizore.easybuy.service.base.*;
 import com.mizore.easybuy.utils.UserHolder;
+import com.mizore.easybuy.utils.audit.AuditUtils;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,11 +71,14 @@ public class ComplaintService {
         // get type
         int complaintTypeCode = 0;
         int role = loginUser.getRole();
+        String eventType = EventTypeEnums.UNKNOWN.getDesc();
         if (Objects.equals(role, RoleEnum.BUYER.getCode())) {
             // buyer
             complaintTypeCode = ComplaintTypeEnum.BUYER_COMPLAINT.getCode();
+            eventType = EventTypeEnums.BUYER_COMPLAINT.getDesc();
         } else if (Objects.equals(role, RoleEnum.SELLER.getCode())) {
             complaintTypeCode = ComplaintTypeEnum.SELLER_COMPLAINT.getCode();
+            eventType = EventTypeEnums.SELLER_COMPLAINT.getDesc();
         }
 
 
@@ -93,9 +96,17 @@ public class ComplaintService {
             Integer orderId = complaintSaveQuery.getOrderId();
             String reason = complaintSaveQuery.getReason();
             mailService.sendMail(orderId, reason);
+
+            // do audit
+            AuditUtils.doAuditAsync(JSON.toJSONString(toSave),
+                    toSave.getId(),
+                    ObjectTypeEnums.COMPLAINT.getDesc(),
+                    eventType);
+
+            return baseVO.success();
         }
 
-        return res ? baseVO.success() : baseVO.failure().setMessage("保存失败！！");
+        return baseVO.failure().setMessage("保存失败！！");
     }
 
     public BaseVO<List<ComplaintSearchVO>> search(

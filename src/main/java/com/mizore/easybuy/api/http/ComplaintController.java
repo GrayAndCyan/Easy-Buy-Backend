@@ -1,5 +1,6 @@
 package com.mizore.easybuy.api.http;
 
+import com.mizore.easybuy.annotation.Audit;
 import com.mizore.easybuy.model.query.ComplaintSaveQuery;
 import com.mizore.easybuy.model.vo.BaseVO;
 import com.mizore.easybuy.model.vo.ComplaintSearchVO;
@@ -19,6 +20,7 @@ public class ComplaintController {
     private ComplaintService complaintService;
 
     // 保存投诉单    - 根据token确认发起人和类型
+    @Audit
     @PostMapping("/save")
     public BaseVO<Object> saveComplaint(
             @RequestBody ComplaintSaveQuery complaintSaveQuery

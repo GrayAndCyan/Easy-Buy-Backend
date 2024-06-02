@@ -26,13 +26,18 @@ public enum EventTypeEnums {
     SELLER_SEND_ORDER("Seller-Send-Order"),
     // 卖家投诉
     SELLER_COMPLAINT("Seller-Complaint")
-    ;
+
 
     // admin action
 
 
 
-    public final String desc;
+    ;
+
+
+
+
+    private final String desc;
 
     public final String getDesc() {
         return desc;
