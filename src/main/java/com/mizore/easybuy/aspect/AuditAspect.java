@@ -14,6 +14,7 @@ import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
@@ -47,7 +48,7 @@ public class AuditAspect {
         }
 
         // 填充事件类型
-        Audit auditAnno = AnnotationUtils.findAnnotation(joinPoint.getSignature().getDeclaringType(), Audit.class);
+        Audit auditAnno = AnnotationUtils.findAnnotation(((MethodSignature)joinPoint.getSignature()).getMethod(), Audit.class);
         if (auditAnno != null) {
             String eventTypeDesc = auditAnno.eventType().getDesc();
             audit.setEventType(eventTypeDesc);
